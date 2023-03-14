@@ -5,7 +5,7 @@ const path = require('path');
 const { DB_USER, DB_PASSWORD, DB_HOST } = process.env;
 
 const sequelize = new Sequelize(
-   `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/Pokemon`,
+   `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/Restaurante`,
    {
       logging: false, // set to console.log to see the raw SQL queries
       native: false, // lets Sequelize know we can use pg-native for ~30% more speed
@@ -39,12 +39,23 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-const { Pokemon, Type } = sequelize.models;
+const { Direccion, Usuario, Mesa, Reserva, Plato, Seccion, Tag, Pedido, DetallePedido, Oferta, Token} = sequelize.models;
 
 // Aca vendrian las relaciones
 // Product.hasMany(Reviews);}
-Pokemon.belongsToMany(Type, {through: "pokemon_types", foreignKey: 'poke_type_id'});
-Type.belongsToMany(Pokemon, {through: "pokemon_types", foreignKey: 'type_id'});
+Direccion.belongsToMany(Usuario, {through: "users_adress", foreignKey: 'adress_id'});
+Usuario.belongsToMany(Direccion, {through: "users_adress", foreignKey: 'users_id'});
+Reserva.belongsToMany(Usuario, {through: "user_booking", foreignKey: 'booking_id'});
+Usuario.belongsToMany(Reserva, {through: "user_booking", foreignKey: 'user_id'});
+Plato.belongsToMany(Tag, {through: "dishes_tags", foreignKey: 'dishes_id'});
+Tag.belongsToMany(Plato, {through: "dishes_tags", foreignKey: 'tag_id'});
+Pedido.hasOne(Usuario);
+Pedido.hasMany(DetallePedido);
+DetallePedido.hasOne(Oferta);
+DetallePedido.hasOne(Plato);
+Usuario.hasOne(Token);
+Plato.hasOne(Seccion);
+Reserva.hasOne(Mesa);
 
 module.exports = {
    ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
