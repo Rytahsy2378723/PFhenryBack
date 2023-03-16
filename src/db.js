@@ -39,23 +39,20 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
-const { Direccion, Usuario, Mesa, Reserva, Plato, Seccion, Tag, Pedido, DetallePedido, Oferta, Token} = sequelize.models;
+const { Direccion, Usuario, Mesa, Reserva, Dishes, Seccion, Tags, Pedido, DetallePedido, Oferta, Token} = sequelize.models;
 
 // Aca vendrian las relaciones
 // Product.hasMany(Reviews);}
-Direccion.belongsToMany(Usuario, {through: "users_adress", foreignKey: 'adress_id'});
-Usuario.belongsToMany(Direccion, {through: "users_adress", foreignKey: 'users_id'});
-Reserva.belongsToMany(Usuario, {through: "user_booking", foreignKey: 'booking_id'});
-Usuario.belongsToMany(Reserva, {through: "user_booking", foreignKey: 'user_id'});
-Plato.belongsToMany(Tag, {through: "dishes_tags", foreignKey: 'dishes_id'});
-Tag.belongsToMany(Plato, {through: "dishes_tags", foreignKey: 'tag_id'});
-Pedido.hasOne(Usuario);
-Pedido.hasMany(DetallePedido);
-DetallePedido.hasOne(Oferta);
-DetallePedido.hasOne(Plato);
-Usuario.hasOne(Token);
-Plato.hasOne(Seccion);
-Reserva.hasOne(Mesa);
+//Direccion.belongsToMany(Usuario, {through: "users_adress"});
+//Reserva.belongsToMany(Usuario, {through: "user_booking"});
+Tags.belongsToMany(Dishes, {through: "dishes_tags"});
+//Pedido.hasOne(Usuario);
+//Pedido.hasMany(DetallePedido);
+//DetallePedido.hasOne(Oferta);
+//DetallePedido.hasOne(Plato);
+//Usuario.hasOne(Token);
+//Plato.hasOne(Seccion);
+//Reserva.hasOne(Mesa);
 
 module.exports = {
    ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
