@@ -22,13 +22,8 @@ server.use((req, res, next) => {
   next();
 });
 
-
-server.get('/', function (req, res) {
-  res.send('Hello World!');
-});
-server.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
-});
+server.use('/', routes);
+server.name = 'API';
 
 server.use(cors());
 server.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));

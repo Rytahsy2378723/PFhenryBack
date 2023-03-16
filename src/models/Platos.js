@@ -6,7 +6,12 @@ module.exports = (sequelize) => {
   sequelize.define('dishes', {
     name: {
       type: DataTypes.STRING,
+      ilike: true,
       allowNull: false, // no sea null
+    },
+    image: {
+      type: DataTypes.STRING,
+      allowNull: true
     },
     description: { // vida
       type: DataTypes.STRING,
@@ -22,7 +27,7 @@ module.exports = (sequelize) => {
         allowNull: false,
         // unique: true // un unico valor,
       },
-      nationality: {
+    nationality: {
       type: DataTypes.STRING, 
       allowNull: false
       // allowNull: false
