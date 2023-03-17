@@ -1,38 +1,63 @@
-const {Plato, Tag} = require("../db");
+const {Dishes, Tags, Section} = require("../db");
+const { Op } = require("sequelize");
 
 //Funcion que se encarga de guardar el nuevo registro que lleva por POST en la DB
-const createDish = async (name, image, description, price, availability, nationality) => {
-  const newDish = await Plato.create(name, image, description, price, availability, nationality);
+const createDish = async (obj, tagId, sectionId) => {
+  const newRegister = {
+    name:obj.name,
+    image:obj.image,
+    description: obj.description,
+    price:obj.price,
+    availability:obj.availability,
+    nationality:obj.nationality
+  }
+  const aditionalTag = await Tags.findAll({
+    where: {
+      id: {
+        [Op.in]: tagId
+      }
+    }
+  });
+  const section = await Section.findByPk(sectionId);
+  const newDish = await Dishes.create(newRegister);
+  await newDish.setTags(aditionalTag, {through: "dishes_tags"});
+  await newDish.setSection(section);
   return newDish;
 };
 
 //Retorna el plato buscado por Id, en conjunto con los tags correspondientes
 const getDishById = async (id) => {
-  const dish = await Plato.findByPk(id, {
-          include: {
-            model: Tag,
+  const dish = await Dishes.findByPk(id, {
+          include: [{
+            model: Tags,
             attributes: ['description'],
+            as: 'tags'
           },
+          {
+            model: Section,
+            attributes: ['description'],
+            as: 'section'
+          }]
         });
 
   return dish;
 };
 //Retorna el plato buscado por nombre, con busqueda de subcadena y case insensitive
 const getDishByName = async (name) => {
-  const dish = await Plato.findAll({where: 
+  const dish = await Dishes.findAll({where: 
     {name: 
     {
         [Op.substring] : name
     }}
     });
 
-  return [...dish];
+  return dish;
 };
 //Retorna el plato buscado por conjunto de tags, con busqueda de array
 const getDishByTags = async (tags) => {
-    const dishes = await Plato.findAll({
+    const dishes = await Dishes.findAll({
         include: {
-            model: Tag,
+            model: Tags,
             where: {
                 description: {
                     [Op.in]: tags 
@@ -42,26 +67,44 @@ const getDishByTags = async (tags) => {
             
         }
     )
-    return [...dishes];
+    return dishes;
 };
 //Retorna todos los platos
 const getAllDishes = async () => {
-  const dishes = await Pokemon.findAll();
-  return [...dishes];
+  const dishes = await Dishes.findAll();
+  return dishes;
 };
-//Edita un registro de plato y lo devuelve editado
-const editDish = async (id, updatedDish) => {
-    const newDish = await Plato.update({ 
-        name: updatedDish.name,
-        image: updatedDish.image,
-        description: updatedDish.description,
-        price: updatedDish.price,
-        availability: updatedDish.availability,
-        nacionality : updatedDish.nacionality
-    }, {
-        where: {id: id}
+//Edita un registro de plato y lo devuelve editado, revisar si resuelve un valor undefined
+const editDish = async (id, updatedDish, tagId, sectionId) => {
+  const newRegister = {
+    name:updatedDish.name,
+    image:updatedDish.image,
+    description: updatedDish.description,
+    price:updatedDish.price,
+    availability:updatedDish.availability,
+    nationality:updatedDish.nationality
+  };
+  const newDish = await Dishes.findByPk(id);
+  if (tagId) {
+    const aditionalTag = await Tags.findAll({
+      where: {
+        id: {
+          [Op.in]: tagId
+        }
+      }
     });
-
-    return newDish;
+    await newDish.setTags(aditionalTag, {through: "dishes_tags"});
+  }
+  if (sectionId) {
+    const section = await Section.findByPk(sectionId);
+    await newDish.setSection(section);
+  }
+  
+  await newDish.update(newRegister, {
+    where: {
+      id:id
+    }
+  });
+  return newDish;
 };
 module.exports = {createDish, getDishById, getDishByName, getAllDishes, getDishByTags, editDish};
