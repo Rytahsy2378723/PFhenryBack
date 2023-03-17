@@ -45,8 +45,8 @@ const {
   Dishes,
   Seccion,
   Tags,
-  Pedido,
-  DetallePedido,
+  Order,
+  DetalleOrder,
   Oferta,
   Token,
 } = sequelize.models;
@@ -56,10 +56,10 @@ const {
 //Direccion.belongsToMany(User, {through: "users_adress"});
 // Reserva.belongsToMany(User, { through: "user_booking" });
 // Tags.belongsToMany(Dishes, { through: "dishes_tags" });
-//Pedido.hasOne(User);
-//Pedido.hasMany(DetallePedido);
-//DetallePedido.hasOne(Oferta);
-//DetallePedido.hasOne(Plato);
+//Order.hasOne(User);
+//Order.hasMany(DetalleOrder);
+//DetalleOrder.hasOne(Oferta);
+//DetalleOrder.hasOne(Plato);
 //User.hasOne(Token);
 //Plato.hasOne(Seccion);
 //Reserva.hasOne(Mesa);
