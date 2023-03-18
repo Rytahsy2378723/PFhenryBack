@@ -15,9 +15,8 @@ const createUser = async (name, password, email, phoneNumber, admin) => {
 
 //Retorna el user buscado por Id
 const getUserById = async (id) => {
-  const user = await User.findByPk(id);
-
-  return user;
+  const result = await User.findByPk(id);
+  return result ? result : (() => {throw new Error("User not Found")})();
 };
 
 //Retorna todos los users
