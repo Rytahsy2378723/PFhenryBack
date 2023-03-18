@@ -4,18 +4,24 @@ const { DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
   // defino el modelo
   sequelize.define('table', {
+    id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true
+    },
     capacity: { // vida
       type: DataTypes.INTEGER,
       allowNull: false,
       // unique: true // un unico valor,
     },
     availability: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false, // no sea null
-    }   
+      type: DataTypes.BOOLEAN,
+      allowNull: true, // no sea null
+    },
   },
-  {
-    timestamps: false,
-  });
+    {
+      timestamps: false,
+    });
 
 };
