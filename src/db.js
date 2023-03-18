@@ -40,8 +40,8 @@ sequelize.models = Object.fromEntries(capsEntries);
 const {
   Address,
   User,
-  Mesa,
-  Reserva,
+  Table,
+  Booking,
   Dishes,
   Seccion,
   Tags,
@@ -73,7 +73,8 @@ Dishes.belongsTo(Section);
 //DetallePedido.hasOne(Plato);
 //User.hasOne(Token);
 //Plato.hasOne(Seccion);
-//Reserva.hasOne(Mesa);
+Booking.belongsTo(Table);
+Table.hasMany(Booking);
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

@@ -3,6 +3,8 @@ const dishesRouter = require("./dishes");
 const tagsRouter = require("./tag");
 const sectionRouter = require("./section");
 const userRouter = require("./users");
+const bookingsRouter = require("./booking");
+const tablesRouter = require("./table.js");
 const addressRouter = require("./address");
 //Aca tienen que poner los require de las cargas que hacen
 
@@ -13,5 +15,9 @@ mainRouter.use("/tags", tagsRouter);
 mainRouter.use("/sections", sectionRouter);
 mainRouter.use("/users", userRouter);
 mainRouter.use("/address", addressRouter);
+
+mainRouter.use("/bookings", bookingsRouter);
+mainRouter.use("/tables", tablesRouter);
+
 
 module.exports = mainRouter;
