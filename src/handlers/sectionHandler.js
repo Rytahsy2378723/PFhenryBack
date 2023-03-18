@@ -4,7 +4,7 @@ const { createSection, getSectionById, getAllSection, editSection } = require(".
 //Funcion que se encarga de enviar los datos en base a lo que le llega.
 const getSectionHandler = async (req, res) => {
   try {
-    const response = getAllSection();
+    const response = await getAllSection();
     //Se llaman a tres funciones: getAllDishes(), getDishByName(), getDishesByTags()
     res.status(200).send(response);
   } catch (error) {
@@ -35,9 +35,9 @@ const sectionByIdHandler = async (req, res) => {
 //retornar el plato editado.
 const editSectionHandler = async (req, res) => {
   const {id} = req.params;
-  const {newSection} = req.query;
+  const {description} = req.body;
   try {
-    const response = await editSection(id, newSection);
+    const response = await editSection(id, {description});
     res.status(200).send(response);
   } catch (error) {
     res.status(400).json({error: error.message});

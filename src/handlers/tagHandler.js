@@ -4,7 +4,7 @@ const { createTag, getTagById, getAllTags, editTag } = require("../controllers/t
 //Funcion que se encarga de enviar los datos en base a lo que le llega.
 const getTagsHandler = async (req, res) => {
   try {
-    const response = getAllTags();
+    const response = await getAllTags();
     //Se llaman a tres funciones: getAllDishes(), getDishByName(), getDishesByTags()
     res.status(200).send(response);
   } catch (error) {

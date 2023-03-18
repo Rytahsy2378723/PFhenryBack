@@ -55,16 +55,17 @@ const getDishByName = async (name) => {
 };
 //Retorna el plato buscado por conjunto de tags, con busqueda de array
 const getDishByTags = async (tags) => {
+  console.log(tags);
     const dishes = await Dishes.findAll({
-        include: {
+        include: [{
             model: Tags,
             where: {
-                description: {
+                id: {
                     [Op.in]: tags 
                 }
-            }
-        } 
-            
+            },
+            through: { attributes: [] } // esto es para que no se incluya la tabla intermedia en la consulta
+          }]
         }
     )
     return dishes;

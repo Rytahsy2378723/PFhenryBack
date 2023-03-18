@@ -18,9 +18,9 @@ const getAllTags = async () => {
   return tags;
 };
 //Edita un registro de tag y lo devuelve editado
-const editTag = async (id, description) => {
+const editTag = async (id, updatedTag) => {
     const newTag = await Tags.update({ 
-        description: description
+        description: updatedTag.description
     }, {
         where: {id: id}
     });

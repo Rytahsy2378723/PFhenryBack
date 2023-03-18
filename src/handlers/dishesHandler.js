@@ -11,13 +11,20 @@ const getDishessHandler = async (req, res) => {
         response = await getDishByName(req.query.name);
         console.log("entre");
         break;
-      case "tags" in req.query: // Si llega un array de tags, busca y devuelve los platos que coincidan
-        response = await getDishByTags(req.query.tags);
-        break;
       default: // Si no llega nada, devuelve todos los elementos
         response = await getAllDishes();
         break;
     }
+    //Se llaman a tres funciones: getAllDishes(), getDishByName(), getDishesByTags()
+    res.status(200).send(response);
+  } catch (error) {
+    res.status(400).json({error: error.message});
+  }
+};
+
+const getDishesByTagsHandler = async (req, res) => {
+  try {
+    const response = await getDishByTags(req.body.tags);
     //Se llaman a tres funciones: getAllDishes(), getDishByName(), getDishesByTags()
     res.status(200).send(response);
   } catch (error) {
@@ -58,4 +65,4 @@ const editDishHandler = async (req, res) => {
   }
 };
 
-module.exports = {getDetailHandler, createDishHandler, getDishessHandler, editDishHandler};
+module.exports = {getDetailHandler, createDishHandler, getDishessHandler, editDishHandler, getDishesByTagsHandler};
