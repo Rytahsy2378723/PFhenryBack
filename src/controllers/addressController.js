@@ -1,11 +1,13 @@
 const { Address } = require("../db");
 const { User } = require("../db");
 
+// Trae todas las direcciones existentes
 const getAllAddress = async () => {
   const result = await Address.findAll();
   return result;
 };
 
+// trae una dirreccion en particular por id
 const getAddressById = async (id) => {
   const result = await Address.findByPk(id);
   return result
@@ -15,6 +17,8 @@ const getAddressById = async (id) => {
       })();
 };
 
+
+//crea una dirreccion relacionada con un usuario, debe recibir por BODY: userId, Streer,number
 const createAddress = async (body) => {
   const { userId, street, number, neighborhood, description, floor } = body;
 
@@ -37,6 +41,7 @@ const createAddress = async (body) => {
   });
 };
 
+//elimina una direccion por id
 const deleteAddress = async (id) => {
   await Address.destroy({
     where: {

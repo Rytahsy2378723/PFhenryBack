@@ -1,15 +1,25 @@
 const { Critic } = require("../db");
+const { User } = require("../db");
 const bcrypt = require("bcrypt"); //Hash de contrasenas (pack de npm)
 
 //Funcion que se encarga de guardar el nuevo registro que lleva por POST en la DB
 const createCritic = async (criticObj) => {
-  const { tittle, content, score } = criticObj;
-  const newCritic = await Critic.create({
-    tittle,
-    content,
-    score,
+  const { userId, tittle, content, score } = criticObj;
+  await User.findByPk(userId).then(async (user) => {
+    if (!user) {
+      throw new Error(`404 No se encontró un usuario con id ${userId}`);
+    } else if (!tittle) {
+      throw new Error("Tittle is requiered");
+    } else {
+      const CriticData = await Critic.create({
+        tittle,
+        content,
+        score,
+      });
+
+      await CriticData.setUser(user);
+    }
   });
-  return newCritic;
 };
 
 //Retorna la critic buscado por Id

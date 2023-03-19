@@ -65,6 +65,8 @@ Tags.belongsToMany(Dishes, { through: "dishes_tags" });
 // Dishes.belongsTo(Section);
 // Aca vendrian las relaciones
 // Product.hasMany(Reviews);}
+Critic.belongsTo(User);
+User.hasMany(Critic)
 Address.belongsTo(User);
 User.hasMany(Address);
 // Reserva.belongsToMany(User, { through: "user_booking" });
