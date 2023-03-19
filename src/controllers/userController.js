@@ -1,4 +1,4 @@
-const { User } = require("../db");
+const { User, Address, Critic } = require("../db");
 const bcrypt = require("bcrypt"); //Hash de contrasenas (pack de npm)
 
 //Funcion que se encarga de guardar el nuevo registro que lleva por POST en la DB
@@ -15,8 +15,20 @@ const createUser = async (name, password, email, phoneNumber, admin) => {
 
 //Retorna el user buscado por Id
 const getUserById = async (id) => {
-  const result = await User.findByPk(id);
-  return result ? result : (() => {throw new Error("User not Found")})();
+  const result = await User.findByPk(id, {
+    include: [
+      {
+        model: Address,
+        as: "Addresses",
+      },
+      { model: Critic, as: "Critics" },
+    ],
+  });
+  return result
+    ? result
+    : (() => {
+        throw new Error("User not Found");
+      })();
 };
 
 //Retorna todos los users
@@ -28,7 +40,7 @@ const getAllUsers = async () => {
 //Edita un registro de user y lo devuelve editado
 const editUser = async (id, updatedUser) => {
   const { password } = updatedUser; //contrasena actual
-  console.log(password)
+  console.log(password);
   const user = await User.findOne({ where: { id } });
   if (user) {
     const match = await bcrypt.compare(password, user.password);

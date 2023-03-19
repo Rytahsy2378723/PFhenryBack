@@ -1,4 +1,5 @@
 const { DataTypes } = require("sequelize");
+const bcrypt = require("bcrypt"); //Hash de contrasenas (pack de npm)
 
 // Exportamos una funcion que define el modelo
 // Luego le injectamos la conexion a sequelize.

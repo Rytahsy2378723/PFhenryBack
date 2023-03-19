@@ -4,8 +4,9 @@ const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
   sequelize.define(
-    "critics",
+    "Critic",
     {
+      //id generado automaticamente, sumando 1
       tittle: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -16,16 +17,16 @@ module.exports = (sequelize) => {
       },
       score: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
       },
     },
     {
-      timestamps: false,
+      timestamps: true,
       classMethods: {
         destroy: function (options) {
           return this.destroy(options);
         },
-      }
+      },
     }
   );
 };
