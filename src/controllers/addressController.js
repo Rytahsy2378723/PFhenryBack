@@ -1,4 +1,5 @@
 const { Address } = require("../db");
+const { User } = require("../db");
 
 const getAllAddress = async () => {
   const result = await Address.findAll();
@@ -7,22 +8,33 @@ const getAllAddress = async () => {
 
 const getAddressById = async (id) => {
   const result = await Address.findByPk(id);
-  return result ? result : (() => {throw new Error("Address not Found")})();
+  return result
+    ? result
+    : (() => {
+        throw new Error("Address not Found");
+      })();
 };
 
 const createAddress = async (body) => {
-  const { street, number, neighborhood, description, floor } = body;
-  if (!street && !number) {
-    throw new Error("Street and Number is requiered");
-  }
-  const newAddress = await Address.create({
-    street,
-    number,
-    neighborhood,
-    description,
-    floor,
+  const { userId, street, number, neighborhood, description, floor } = body;
+
+  await User.findByPk(userId).then(async (user) => {
+    if (!user) {
+      throw new Error(`404 No se encontró un usuario con id ${userId}`);
+    } else if (!street && !number) {
+      throw new Error("Street and Number is requiered");
+    } else {
+      const AddressData = await Address.create({
+        street,
+        number,
+        neighborhood,
+        description,
+        floor,
+      });
+
+      await AddressData.setUser(user);
+    }
   });
-  return newAddress;
 };
 
 const deleteAddress = async (id) => {
