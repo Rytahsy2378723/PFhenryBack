@@ -44,7 +44,7 @@ const {
   Table,
   Booking,
   Dishes,
-  Seccion,
+  Section,
   Tags,
   Pedido,
   DetallePedido,
@@ -62,7 +62,7 @@ Tags.belongsToMany(Dishes, { through: "dishes_tags" });
 //DetallePedido.hasOne(Oferta);
 //DetallePedido.hasOne(Plato);
 //Usuario.hasOne(Token);
-// Dishes.belongsTo(Section);
+Dishes.belongsTo(Section);
 // Aca vendrian las relaciones
 // Product.hasMany(Reviews);}
 Critic.belongsTo(User);
