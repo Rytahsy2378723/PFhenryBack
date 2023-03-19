@@ -3,7 +3,7 @@ const { DataTypes } = require('sequelize');
 // Luego le injectamos la conexion a sequelize.
 module.exports = (sequelize) => {
   // defino el modelo
-  sequelize.define('detail_order', {
+  sequelize.define('OrderDetail', {
     quantity: {
       type: DataTypes.INTEGER, 
       allowNull: false
@@ -14,6 +14,10 @@ module.exports = (sequelize) => {
         allowNull: true
         // allowNull: false
       }   
-  });
+  },
+  {
+    timestamps: false
+  }
+  );
 
 };

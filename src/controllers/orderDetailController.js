@@ -1,4 +1,4 @@
-const { OrderDetail } = require("../db.js");
+const { OrderDetail, Order } = require("../db.js");
 
 //Retorna el detalle con el id pasado
 const getOrderDetailById = async (id) => {
@@ -15,7 +15,13 @@ const getAllOrderDetail = async () => {
   
   return result 
 };
-
+// retorna todos los detalles de pedidos de el pedido con el id pasado por parametro
+const getAllOrderDetailFromOrderId = async(id) => {
+  const order = await Order.findByPk(id)
+  if(!order) return {error: "Pedido no encontrado"}
+  if(!order.OrderDetail.length) return { error: "EL pedido no tiene detalles de pedido"}
+  return order.OrderDetail
+}
 //Elimina el detalle de pedido con el id pasado por parametro
 const deleteOrderDetail = async (id) => {
     const orderDetail = await OrderDetail.findByPk(id)
@@ -43,13 +49,14 @@ const editOrderDetail = async (id,quantity, final_price, ) => {
     return "Detalle modificado"
     };
 //Crea un nuevo detalle de pedido en la BD
-const createOrderDetail = async (quantity, final_price) => {
+const createOrderDetail = async (quantity, final_price, OrderId) => {
     if(!quantity) return {error: "falta la cantidad"}
     console.log(OrderDetail)
   const newOrder = await OrderDetail.create(
     {
       quantity,
-      final_price
+      final_price,
+      OrderId
     }
   );
   return newOrder;
@@ -60,4 +67,5 @@ module.exports = {
   deleteOrderDetail,
   editOrderDetail,
   createOrderDetail,
+  getAllOrderDetailFromOrderId
 };
