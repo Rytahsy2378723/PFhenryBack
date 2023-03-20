@@ -28,15 +28,15 @@ const getCriticById = async (id) => {
     include: [
       {
         model: User,
-        attributes: ["id", "name"],
-        as: "userData",
+        attributes: ["id", "name", "email"],
+        as: "User",
       },
     ],
   });
   return result
     ? result
     : (() => {
-        throw new Error("Critic not Found");
+        throw new Error(`404 Critic id ${id} not Found`);
       })();
 };
 
@@ -46,8 +46,8 @@ const getAllCritics = async () => {
     include: [
       {
         model: User,
-        attributes: ["id", "name"],
-        as: "userData",
+        attributes: ["id", "name", "email"],
+        as: "User",
       },
     ],
   });
