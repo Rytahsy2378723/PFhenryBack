@@ -24,7 +24,15 @@ const createCritic = async (criticObj) => {
 
 //Retorna la critic buscado por Id
 const getCriticById = async (id) => {
-  const result = await Critic.findByPk(id);
+  const result = await Critic.findByPk(id, {
+    include: [
+      {
+        model: User,
+        attributes: ["id", "name"],
+        as: "User",
+      },
+    ],
+  });
   return result
     ? result
     : (() => {

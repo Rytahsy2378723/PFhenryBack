@@ -2,13 +2,12 @@ const { User, Address, Critic } = require("../db");
 const bcrypt = require("bcrypt"); //Hash de contrasenas (pack de npm)
 
 //Funcion que se encarga de guardar el nuevo registro que lleva por POST en la DB
-const createUser = async (name, password, email, phoneNumber, admin) => {
+const createUser = async (name, password, email, phoneNumber) => {
   const newUser = await User.create({
     name,
     password,
     email,
     phoneNumber,
-    admin,
   });
   return newUser;
 };
