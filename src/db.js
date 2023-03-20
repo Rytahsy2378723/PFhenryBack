@@ -62,7 +62,6 @@ Dishes.belongsTo(Section);
 Tags.belongsToMany(Dishes, { through: "dishes_tags" });
 
 //ORDER
-
 Order.belongsTo(User);
 Order.hasMany(OrderDetail);
 
@@ -72,7 +71,6 @@ OrderDetail.hasOne(Offer);
 OrderDetail.hasOne(Dishes);
 
 //USER
-
 User.hasMany(Order);
 User.hasMany(Critic);
 User.hasMany(Address);
@@ -80,24 +78,19 @@ User.hasMany(Booking);
 //User.hasOne(Token);
 
 //BOOKING
-
 Booking.belongsTo(User);
 Booking.belongsTo(Table);
 
 //CRITIC
-
 Critic.belongsTo(User);
 
 //TOKEN
-
 //Token.belongsTo(User)
 
 //ADDRESS
-
 Address.belongsTo(User);
 
 //TABLE
-
 Table.hasMany(Booking);
 
 module.exports = {
