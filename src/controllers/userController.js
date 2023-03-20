@@ -1,4 +1,4 @@
-const { User, Address, Critic } = require("../db");
+const { User, Address, Critic, Order } = require("../db");
 const bcrypt = require("bcrypt"); //Hash de contrasenas (pack de npm)
 
 //Funcion que se encarga de guardar el nuevo registro que lleva por POST en la DB
@@ -21,6 +21,8 @@ const getUserById = async (id) => {
         as: "Addresses",
       },
       { model: Critic, as: "Critics" },
+      { model: Order, as: "Orders" },
+      { model: Order, as: "Orders" },
     ],
   });
   return result
