@@ -29,7 +29,7 @@ const getCriticById = async (id) => {
       {
         model: User,
         attributes: ["id", "name"],
-        as: "User",
+        as: "userData",
       },
     ],
   });
@@ -42,7 +42,15 @@ const getCriticById = async (id) => {
 
 //Retorna todos los critics
 const getAllCritics = async () => {
-  const critics = await Critic.findAll();
+  const critics = await Critic.findAll({
+    include: [
+      {
+        model: User,
+        attributes: ["id", "name"],
+        as: "userData",
+      },
+    ],
+  });
   return [...critics];
 };
 
