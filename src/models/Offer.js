@@ -3,8 +3,8 @@ const { DataTypes } = require('sequelize');
 // Luego le injectamos la conexion a sequelize.
 module.exports = (sequelize) => {
   // defino el modelo
-  sequelize.define('offer', {
-    porc_disc: {
+  sequelize.define('Offer', {
+    discount_porc: {
       type: DataTypes.FLOAT, 
       allowNull: false
       // allowNull: false
@@ -14,6 +14,9 @@ module.exports = (sequelize) => {
         allowNull: false
         // allowNull: false
       }   
+  },
+  {
+    timestamps: false
   });
 
 };
