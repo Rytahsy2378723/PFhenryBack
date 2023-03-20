@@ -52,25 +52,52 @@ const {
   Token,
 } = sequelize.models;
 // Aca vendrian las relaciones
+
+// DISHES
 // Dishes.hasMany(Critics);}
 Dishes.belongsToMany(Tags, { through: "dishes_tags" });
+Dishes.belongsTo(Section);
+
+//TAGS
 Tags.belongsToMany(Dishes, { through: "dishes_tags" });
+
+//ORDER
+
 Order.belongsTo(User);
-User.hasMany(Order);
-OrderDetail.belongsTo(Order);
 Order.hasMany(OrderDetail);
+
+//ORDER DETAIL
+OrderDetail.belongsTo(Order);
 OrderDetail.hasOne(Offer);
 OrderDetail.hasOne(Dishes);
-//User.hasOne(Token);
-//Token.belongsTo(User)
-Dishes.belongsTo(Section);
-Critic.belongsTo(User);
+
+//USER
+
+User.hasMany(Order);
 User.hasMany(Critic);
-Address.belongsTo(User);
 User.hasMany(Address);
-Booking.belongsTo(User);
 User.hasMany(Booking);
+//User.hasOne(Token);
+
+//BOOKING
+
+Booking.belongsTo(User);
 Booking.belongsTo(Table);
+
+//CRITIC
+
+Critic.belongsTo(User);
+
+//TOKEN
+
+//Token.belongsTo(User)
+
+//ADDRESS
+
+Address.belongsTo(User);
+
+//TABLE
+
 Table.hasMany(Booking);
 
 module.exports = {
