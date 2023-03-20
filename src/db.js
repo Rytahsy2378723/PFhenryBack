@@ -38,12 +38,13 @@ sequelize.models = Object.fromEntries(capsEntries);
 // En sequelize.models están todos los modelos importados como propiedades
 // Para relacionarlos hacemos un destructuring
 const {
+  Critic,
   Address,
   User,
   Table,
   Booking,
   Dishes,
-  Seccion,
+  Section,
   Tags,
   Order,
   OrderDetail,
@@ -60,14 +61,16 @@ Order.belongsTo(User);
 User.hasMany(Order);
 OrderDetail.belongsTo(Order);
 Order.hasMany(OrderDetail);
-
 OrderDetail.hasOne(Offer);
 OrderDetail.hasOne(Dishes);
 //Usuario.hasOne(Token);
 // Dishes.belongsTo(Seccion);
 // Aca vendrian las relaciones
 // Product.hasMany(Reviews);}
-//Address.belongsToMany(User, {through: "users_adress"});
+Critic.belongsTo(User);
+User.hasMany(Critic)
+Address.belongsTo(User);
+User.hasMany(Address);
 // Reserva.belongsToMany(User, { through: "user_booking" });
 // Tags.belongsToMany(Dishes, { through: "dishes_tags" });
 //Order.hasOne(User);

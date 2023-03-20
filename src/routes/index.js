@@ -9,6 +9,8 @@ const addressRouter = require("./address");
 const orderRoutes = require("./order");
 const orderDetailRoutes = require("./orderDetail");
 const offerRoutes = require("./offers");
+const criticRouter = require("./critic");
+
 //Aca tienen que poner los require de las cargas que hacen
 
 const mainRouter = Router();
@@ -19,10 +21,10 @@ mainRouter.use("/sections", sectionRouter);
 mainRouter.use("/users", userRouter);
 mainRouter.use("/address", addressRouter);
 mainRouter.use("/orders", orderRoutes);
+mainRouter.use("/critics", criticRouter);
 mainRouter.use("/bookings", bookingsRouter);
 mainRouter.use("/tables", tablesRouter);
 mainRouter.use("/orderdetails", orderDetailRoutes);
 mainRouter.use("/offers", offerRoutes);
-
 
 module.exports = mainRouter;
