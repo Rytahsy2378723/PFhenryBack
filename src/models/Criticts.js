@@ -16,8 +16,13 @@ module.exports = (sequelize) => {
         allowNull: true,
       },
       score: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.FLOAT,
         allowNull: true,
+        validate: {
+          min: 1,
+          max: 5,
+        },
+        defaultValue: 5,
       },
     },
     {
