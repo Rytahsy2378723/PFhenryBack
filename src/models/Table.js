@@ -10,14 +10,14 @@ module.exports = (sequelize) => {
       primaryKey: true,
       autoIncrement: true
     },
-    capacity: { // vida
+    capacity: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      // unique: true // un unico valor,
+
     },
     availability: {
       type: DataTypes.BOOLEAN,
-      allowNull: true, // no sea null
+      allowNull: true,
     },
   },
     {

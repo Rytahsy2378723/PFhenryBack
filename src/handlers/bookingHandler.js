@@ -1,11 +1,11 @@
 const { Router } = require("express");
 const bookings = Router();
-const { createBooking, getBookings, getBookingsByUser, deleteBooking, getBookingsInThisDate } = require("../controllers/bookingController.js");
+const { createBooking, getBookings, getBookingsByUser, deleteBooking, getBookingsInThisDate, updateBooking } = require("../controllers/bookingController.js");
 
 const postBookingHandler = async (req, res) => {
     try {
         const newBooking = await createBooking(req.body);
-        res.status(201).json({ message: newBooking });
+        res.status(201).json(newBooking);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -48,6 +48,15 @@ const getBookingsInThisDateHandler = async (req, res) => {
     }
 }
 
+const putBookingHandler = async (req, res) => {
+    try {
+        const update = await updateBooking(req.params.idBooking, req.body);
+        res.status(200).json(update);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
 
 
-module.exports = { getBookingsInThisDateHandler, postBookingHandler, getBookingHandler, getBookingsByUserHandler, deleteBookingHandler }
+
+module.exports = { putBookingHandler, getBookingsInThisDateHandler, postBookingHandler, getBookingHandler, getBookingsByUserHandler, deleteBookingHandler }

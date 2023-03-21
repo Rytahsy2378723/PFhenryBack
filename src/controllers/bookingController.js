@@ -1,41 +1,13 @@
 
 const { Booking, Table, User } = require("../db.js");
 const moment = require("moment");
+const { getTablesToCreateReservation } = require("./tableController.js");
+const createBookingFunction = require("./createBookingFunction.js");
 
 
 const createBooking = async (body) => {
-    const tableDesired = await Table.findByPk(body.mesa);
-    const { fecha_inicio, hora_inicio, cantidad_comensales, nota, idUser } = body;
-    let startTimeHour = hora_inicio[0] + hora_inicio[1];
-    startTimeHour = parseInt(startTimeHour);
-    startTimeHour = startTimeHour * 60;
-    let startTimeMinute = hora_inicio[3] + hora_inicio[4];
-    startTimeMinute = parseInt(startTimeMinute)
-
-    const STARTMINUTES = startTimeHour + startTimeMinute;
-    let FINISHMINUTES = STARTMINUTES + 120;
-    let DATEEND = fecha_inicio;
-    if (FINISHMINUTES > 1440) {
-        let startDate = moment(fecha_inicio);
-        DATEEND = startDate.add(1, "day");
-        FINISHMINUTES = FINISHMINUTES - 1440;
-    }
-    let TimeEnd = FINISHMINUTES / 60;
-    TimeEnd = Math.floor(TimeEnd);
-    let timeEndFormat = TimeEnd + ":" + hora_inicio[3] + hora_inicio[4] + ":00";
-
-    await Booking.create({
-        date_start: fecha_inicio,
-        time_start: hora_inicio + ":00",
-        date_end: DATEEND,
-        time_end: timeEndFormat,
-        costumers_quantity: cantidad_comensales,
-        note: nota,
-        tableId: tableDesired.id,
-        UserId: idUser
-    })
-    return "Successfully created";
-
+    const createBooking = await createBookingFunction(body);
+    return createBooking;
 }
 
 const getBookings = async () => {
@@ -64,4 +36,30 @@ const getBookingsInThisDate = async (date) => {
     return bookings;
 }
 
-module.exports = { getBookingsInThisDate, createBooking, getBookings, getBookingsByUser, deleteBooking }
+const updateBooking = async (idBooking, body) => {
+    let { fecha_inicio, hora_inicio, cantidad_comensales, nota, mesa } = body;
+    const bookingToUpdate = await Booking.findByPk(idBooking);
+    fecha_inicio = fecha_inicio || bookingToUpdate.date_start;
+    hora_inicio = hora_inicio || bookingToUpdate.time_start;
+    cantidad_comensales = cantidad_comensales || bookingToUpdate.costumers_quantity;
+    nota = nota || bookingToUpdate.note;
+    mesa = mesa || bookingToUpdate.tableId;
+    let bodyObject = { fecha_inicio, hora_inicio, cantidad_comensales };
+
+    const responseTables = await getTablesToCreateReservation(bodyObject);
+    const tableDesired = responseTables.find(table => table.id === mesa);
+    if (tableDesired.availability) {
+        const idUser = bookingToUpdate.UserId;
+        bodyObject = { mesa, fecha_inicio, hora_inicio, cantidad_comensales, nota, idUser };
+        await createBooking(bodyObject);
+        await Booking.destroy({
+            where: { id: bookingToUpdate.id }
+        });
+        return "Successfully updated";
+    } else {
+        throw new Error("This table is not available for this date and time")
+    }
+
+}
+
+module.exports = { getBookingsInThisDate, createBooking, getBookings, getBookingsByUser, deleteBooking, updateBooking }
