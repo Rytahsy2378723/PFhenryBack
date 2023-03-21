@@ -1,8 +1,9 @@
-const {Dishes, Tags, Section} = require("../db");
+const {Dishes, Tags, Section, Critic} = require("../db");
 const { Op } = require("sequelize");
 
 //Funcion que se encarga de guardar el nuevo registro que lleva por POST en la DB
 const createDish = async (obj, tagId, sectionId) => {
+  console.log(tagId);
   const newRegister = {
     name:obj.name,
     image:obj.image,
@@ -37,7 +38,13 @@ const getDishById = async (id) => {
             model: Section,
             attributes: ['description'],
             as: 'section'
-          }]
+          },
+          {
+            model: Critic,
+            attributes: ['id','title', 'content', 'score'],
+            as: 'reviews'
+          }
+        ]
         });
 
   return dish;
@@ -72,7 +79,20 @@ const getDishByTags = async (tags) => {
 };
 //Retorna todos los platos
 const getAllDishes = async () => {
-  const dishes = await Dishes.findAll();
+  const dishes = await Dishes.findAll({
+    include: [{
+      model: Tags,
+      attributes: ['id','description'],
+      as: 'tags',
+      through: { attributes: [] }
+    },
+    {
+      model: Critic,
+      attributes: ['id','score'],
+      as: 'Critics'
+    }
+  ]
+  });
   return dishes;
 };
 //Edita un registro de plato y lo devuelve editado, revisar si resuelve un valor undefined

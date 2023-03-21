@@ -53,10 +53,15 @@ const {
 } = sequelize.models;
 // Aca vendrian las relaciones
 
+// Product.hasMany(Reviews);}
+
+// Aca vendrian las relaciones
+
 // DISHES
-// Dishes.hasMany(Critics);}
+Dishes.hasMany(Critics);}
 Dishes.belongsToMany(Tags, { through: "dishes_tags" });
 Dishes.belongsTo(Section);
+Dishes.hasMany(OrderDetail);
 
 //TAGS
 Tags.belongsToMany(Dishes, { through: "dishes_tags" });
@@ -68,7 +73,6 @@ Order.hasMany(OrderDetail);
 //ORDER DETAIL
 OrderDetail.belongsTo(Order);
 OrderDetail.hasOne(Offer);
-OrderDetail.hasOne(Dishes);
 
 //USER
 User.hasMany(Order);
@@ -78,8 +82,8 @@ User.hasMany(Booking);
 //User.hasOne(Token);
 
 //BOOKING
-Booking.belongsTo(User);
 Booking.belongsTo(Table);
+Booking.belongsTo(User);
 
 //CRITIC
 Critic.belongsTo(User);
@@ -92,8 +96,8 @@ Address.belongsTo(User);
 
 //TABLE
 Table.hasMany(Booking);
-Booking.belongsTo(User);
-User.hasMany(Booking);
+
+
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
