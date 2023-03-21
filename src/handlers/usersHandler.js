@@ -19,7 +19,7 @@ const getUsersHandler = async (req, res) => {
 
 //Funcion que se encarga de mandar lo recibido por POST para crear un nuevo registro en la BD
 const createUserHandler = async (req, res) => {
-  const { name, password, email, phoneNumber, admin } = req.body;
+  const { name, password, email, phoneNumber } = req.body;
   try {
     const datosUsuario =
       name && password && email && phoneNumber
@@ -32,7 +32,6 @@ const createUserHandler = async (req, res) => {
       password,
       email,
       phoneNumber,
-      admin || false
     );
     res.status(200).json(response);
   } catch (error) {

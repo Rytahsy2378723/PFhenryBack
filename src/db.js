@@ -52,34 +52,45 @@ const {
   Token,
 } = sequelize.models;
 // Aca vendrian las relaciones
-// Product.hasMany(Reviews);}
-//Direccion.belongsToMany(Usuario, {through: "users_adress"});
-//Reserva.belongsToMany(Usuario, {through: "user_booking"});
-Dishes.belongsToMany(Tags, {through: "dishes_tags"});
-Tags.belongsToMany(Dishes, {through: "dishes_tags"});
+
+// DISHES
+// Dishes.hasMany(Critics);}
+Dishes.belongsToMany(Tags, { through: "dishes_tags" });
+Dishes.belongsTo(Section);
+
+//TAGS
+Tags.belongsToMany(Dishes, { through: "dishes_tags" });
+
+//ORDER
 Order.belongsTo(User);
-User.hasMany(Order);
-OrderDetail.belongsTo(Order);
 Order.hasMany(OrderDetail);
+
+//ORDER DETAIL
+OrderDetail.belongsTo(Order);
 OrderDetail.hasOne(Offer);
 OrderDetail.hasOne(Dishes);
-//Usuario.hasOne(Token);
-// Dishes.belongsTo(Seccion);
-// Aca vendrian las relaciones
-// Product.hasMany(Reviews);}
-Critic.belongsTo(User);
-User.hasMany(Critic)
-Address.belongsTo(User);
+
+//USER
+User.hasMany(Order);
+User.hasMany(Critic);
 User.hasMany(Address);
-// Reserva.belongsToMany(User, { through: "user_booking" });
-// Tags.belongsToMany(Dishes, { through: "dishes_tags" });
-//Order.hasOne(User);
-//Order.hasMany(OrderDetail);
-//OrderDetail.hasOne(Offer);
-//OrderDetail.hasOne(Plato);
+User.hasMany(Booking);
 //User.hasOne(Token);
-//Plato.hasOne(Seccion);
+
+//BOOKING
+Booking.belongsTo(User);
 Booking.belongsTo(Table);
+
+//CRITIC
+Critic.belongsTo(User);
+
+//TOKEN
+//Token.belongsTo(User)
+
+//ADDRESS
+Address.belongsTo(User);
+
+//TABLE
 Table.hasMany(Booking);
 Booking.belongsTo(User);
 User.hasMany(Booking);

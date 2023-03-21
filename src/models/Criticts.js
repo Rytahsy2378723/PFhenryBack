@@ -7,7 +7,7 @@ module.exports = (sequelize) => {
     "Critic",
     {
       //id generado automaticamente, sumando 1
-      tittle: {
+      title: {
         type: DataTypes.STRING,
         allowNull: false,
       },
