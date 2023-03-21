@@ -79,6 +79,8 @@ User.hasMany(Address);
 //Plato.hasOne(Seccion);
 Booking.belongsTo(Table);
 Table.hasMany(Booking);
+Booking.belongsTo(User);
+User.hasMany(Booking);
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');

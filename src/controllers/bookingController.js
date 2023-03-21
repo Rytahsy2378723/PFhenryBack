@@ -1,10 +1,11 @@
 
-const { Booking, Table } = require("../db.js");
+const { Booking, Table, User } = require("../db.js");
+const moment = require("moment");
 
 
 const createBooking = async (body) => {
     const tableDesired = await Table.findByPk(body.mesa);
-    const { fecha_inicio, hora_inicio, cantidad_comensales, nota } = body;
+    const { fecha_inicio, hora_inicio, cantidad_comensales, nota, idUser } = body;
     let startTimeHour = hora_inicio[0] + hora_inicio[1];
     startTimeHour = parseInt(startTimeHour);
     startTimeHour = startTimeHour * 60;
@@ -15,10 +16,8 @@ const createBooking = async (body) => {
     let FINISHMINUTES = STARTMINUTES + 120;
     let DATEEND = fecha_inicio;
     if (FINISHMINUTES > 1440) {
-        let selectDay = DATEEND[8] + DATEEND[9]
-        selectDay = parseInt(selectDay);
-        selectDay = selectDay + 1;
-        DATEEND = DATEEND[0] + DATEEND[1] + DATEEND[2] + DATEEND[3] + DATEEND[4] + DATEEND[5] + DATEEND[6] + DATEEND[7] + selectDay;
+        let startDate = moment(fecha_inicio);
+        DATEEND = startDate.add(1, "day");
         FINISHMINUTES = FINISHMINUTES - 1440;
     }
     let TimeEnd = FINISHMINUTES / 60;
@@ -32,9 +31,10 @@ const createBooking = async (body) => {
         time_end: timeEndFormat,
         costumers_quantity: cantidad_comensales,
         note: nota,
-        tableId: tableDesired.id
+        tableId: tableDesired.id,
+        UserId: idUser
     })
-    return "Correctamente creado";
+    return "Successfully created";
 
 }
 
@@ -43,4 +43,25 @@ const getBookings = async () => {
     return allBookings;
 }
 
-module.exports = { createBooking, getBookings }
+//esta funcion retorna todas las reservas de un usuario cuyo id llega por parametros.
+const getBookingsByUser = async (userId) => {
+    const user = await User.findByPk(userId);
+    const bookingsOfThisUser = await user.getBookings();
+    return bookingsOfThisUser;
+}
+
+const deleteBooking = async (bookingId) => {
+    await Booking.destroy({
+        where: { id: bookingId }
+    });
+    return "Successfully deleted"
+}
+
+const getBookingsInThisDate = async (date) => {
+    const bookings = await Booking.findAll({
+        where: { date_start: date }
+    });
+    return bookings;
+}
+
+module.exports = { getBookingsInThisDate, createBooking, getBookings, getBookingsByUser, deleteBooking }
