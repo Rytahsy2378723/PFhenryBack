@@ -1,6 +1,7 @@
 const { Booking, Table } = require("../db.js");
 
 
+
 const createTable = async (capacity) => {
     await Table.create({
         capacity: capacity
@@ -50,11 +51,43 @@ const getTablesToCreateReservation = async (body) => {
                     TableOfThisBooking.availability = false;
                 }
             }
+
+            if (STARTMINUTES < 120) {
+                if (allBookings[i].date_end === fecha_inicio) {
+                    let endTimeHour = allBookings[i].time_end[0] + allBookings[i].time_end[1];
+                    endTimeHour = parseInt(endTimeHour);
+                    endTimeHour = endTimeHour * 60;
+                    let endTimeMinute = allBookings[i].time_end[3] + allBookings[i].time_end[4];
+                    endTimeMinute = parseInt(endTimeMinute)
+                    endTimeHour = endTimeHour + endTimeMinute;
+                    if (STARTMINUTES < endTimeHour) {
+                        let TableOfThisBooking = tablesSuitableForCapacity.find(table => table.id === allBookings[i].tableId);
+                        TableOfThisBooking.availability = false;
+                    }
+                }
+            }
         }
+
         return tablesSuitableForCapacity;
     } else {
         throw new Error("We do not have tables with the indicated capacity");
     }
 }
 
-module.exports = { createTable, getTables, getAllBookingInThisTable, getTablesToCreateReservation };
+const deleteTable = async (tableId) => {
+    await Table.destroy({
+        where: { id: tableId }
+    });
+    return "Successfully deleted"
+}
+
+const putTable = async (body) => {
+    const { idTable, capacity } = body;
+    Table.update(
+        { capacity: capacity },
+        { where: { id: idTable } }
+    );
+    return "Successfully updated";
+}
+
+module.exports = { createTable, getTables, getAllBookingInThisTable, getTablesToCreateReservation, deleteTable, putTable };

@@ -52,25 +52,52 @@ const {
   Token,
 } = sequelize.models;
 // Aca vendrian las relaciones
+
 // Product.hasMany(Reviews);}
 
 // Aca vendrian las relaciones
-Dishes.hasMany(Critic);
-Critic.belongsTo(User);
-User.hasMany(Critic)
-Address.belongsTo(User);
-User.hasMany(Address);
-Dishes.belongsToMany(Tags, {through: "dishes_tags"});
-Tags.belongsToMany(Dishes, {through: "dishes_tags"});
-Order.belongsTo(User);
-User.hasMany(Order);
-OrderDetail.belongsTo(Order);
-Order.hasMany(OrderDetail);
-OrderDetail.hasOne(Offer);
-Dishes.hasMany(OrderDetail);
+
+// DISHES
+Dishes.hasMany(Critics);}
+Dishes.belongsToMany(Tags, { through: "dishes_tags" });
 Dishes.belongsTo(Section);
+Dishes.hasMany(OrderDetail);
+
+//TAGS
+Tags.belongsToMany(Dishes, { through: "dishes_tags" });
+
+//ORDER
+Order.belongsTo(User);
+Order.hasMany(OrderDetail);
+
+//ORDER DETAIL
+OrderDetail.belongsTo(Order);
+OrderDetail.hasOne(Offer);
+
+//USER
+User.hasMany(Order);
+User.hasMany(Critic);
+User.hasMany(Address);
+User.hasMany(Booking);
+//User.hasOne(Token);
+
+//BOOKING
 Booking.belongsTo(Table);
+Booking.belongsTo(User);
+
+//CRITIC
+Critic.belongsTo(User);
+
+//TOKEN
+//Token.belongsTo(User)
+
+//ADDRESS
+Address.belongsTo(User);
+
+//TABLE
 Table.hasMany(Booking);
+
+
 
 module.exports = {
   ...sequelize.models, // para poder importar los modelos así: const { Product, User } = require('./db.js');
