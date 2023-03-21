@@ -12,36 +12,32 @@ module.exports = (sequelize) => {
     },
     date_start: {
       type: DataTypes.DATEONLY,
-      allowNull: false, // no sea null
+      allowNull: false,
     },
-    time_start: { // vida
+    time_start: {
       type: DataTypes.TIME,
       allowNull: false,
-      // unique: true // un unico valor,
+
     },
     date_end: {
       type: DataTypes.DATEONLY,
-      allowNull: false, // no sea null
+      allowNull: false,
     },
-    time_end: { // vida
+    time_end: {
       type: DataTypes.TIME,
       allowNull: false,
-      // unique: true // un unico valor,
+
     },
     costumers_quantity: {
       type: DataTypes.INTEGER,
       allowNull: false
-      // allowNull: false
+
     },
     note: {
       type: DataTypes.STRING,
       allowNull: true
-      // allowNull: false
+
     },
-    // tableId: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: false
-    // }
   },
   );
 
