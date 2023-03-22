@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { createSection, getSectionById, getAllSection, editSection } = require("../controllers/sectionController");
+const { createSection, getSectionById, getAllSection, editSection, logicDelete } = require("../controllers/sectionController");
 
 //Funcion que se encarga de enviar los datos en base a lo que le llega.
 const getSectionHandler = async (req, res) => {
@@ -31,6 +31,15 @@ const sectionByIdHandler = async (req, res) => {
     res.status(400).json({error: error.message});
   }
 };
+const sectionDestroyHandler = async (req, res) => {
+  const {id} = req.params;
+  try {
+    const response = await logicDelete(id);
+    res.status(200).send(response);
+  } catch (error) {
+    res.status(400).json({error: error.message});
+  }
+};
 //Funcion que se encarga de, cuando se recibe un id y un nuevo plato,  
 //retornar el plato editado.
 const editSectionHandler = async (req, res) => {
@@ -44,4 +53,4 @@ const editSectionHandler = async (req, res) => {
   }
 };
 
-module.exports = {sectionByIdHandler, createSectionHandler, getSectionHandler, editSectionHandler};
+module.exports = {sectionByIdHandler, createSectionHandler, getSectionHandler, editSectionHandler, sectionDestroyHandler};

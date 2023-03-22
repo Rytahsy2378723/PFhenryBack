@@ -95,6 +95,12 @@ const getAllDishes = async () => {
   });
   return dishes;
 };
+
+const logicDelete = async (id) => {
+  const dishes = await Dishes.destroy({ where: { id: id }, force: false });
+
+  return "Borrado realizado";
+};
 //Edita un registro de plato y lo devuelve editado, revisar si resuelve un valor undefined
 const editDish = async (id, updatedDish, tagId, sectionId) => {
   const newRegister = {
@@ -128,4 +134,4 @@ const editDish = async (id, updatedDish, tagId, sectionId) => {
   });
   return newDish;
 };
-module.exports = {createDish, getDishById, getDishByName, getAllDishes, getDishByTags, editDish};
+module.exports = {createDish, getDishById, getDishByName, getAllDishes, getDishByTags, editDish, logicDelete};

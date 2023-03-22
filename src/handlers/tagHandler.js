@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const { createTag, getTagById, getAllTags, editTag } = require("../controllers/tagController");
+const { createTag, getTagById, getAllTags, editTag, logicDelete } = require("../controllers/tagController");
 
 //Funcion que se encarga de enviar los datos en base a lo que le llega.
 const getTagsHandler = async (req, res) => {
@@ -31,6 +31,16 @@ const tagByIdHandler = async (req, res) => {
     res.status(400).json({error: error.message});
   }
 };
+
+const tagDestroyHandler = async (req, res) => {
+  const {id} = req.params;
+  try {
+    const response = await logicDelete(id);
+    res.status(200).send(response);
+  } catch (error) {
+    res.status(400).json({error: error.message});
+  }
+};
 //Funcion que se encarga de, cuando se recibe un id y un nuevo plato,  
 //retornar el plato editado.
 const editTagHandler = async (req, res) => {
@@ -44,4 +54,4 @@ const editTagHandler = async (req, res) => {
   }
 };
 
-module.exports = {tagByIdHandler, createTagHandler, getTagsHandler, editTagHandler};
+module.exports = {tagByIdHandler, createTagHandler, getTagsHandler, editTagHandler, tagDestroyHandler};
