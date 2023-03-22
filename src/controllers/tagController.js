@@ -17,6 +17,12 @@ const getAllTags = async () => {
   const tags = await Tags.findAll();
   return tags;
 };
+//Se encarga de eliminar un tag mediante borrado logico
+const logicDelete = async (id) => {
+  const tag = await Tag.destroy({ where: { id: id }, force: false });
+
+  return "Borrado realizado";
+};
 //Edita un registro de tag y lo devuelve editado
 const editTag = async (id, updatedTag) => {
     const newTag = await Tags.update({ 
@@ -26,4 +32,4 @@ const editTag = async (id, updatedTag) => {
     });
     return newTag;
 };
-module.exports = {createTag, getTagById, getAllTags, editTag};
+module.exports = {createTag, getTagById, getAllTags, editTag, logicDelete};

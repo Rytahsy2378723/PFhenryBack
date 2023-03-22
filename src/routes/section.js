@@ -6,7 +6,8 @@ const {
     sectionByIdHandler, 
     createSectionHandler, 
     getSectionHandler, 
-    editSectionHandler
+    editSectionHandler,
+    sectionDestroyHandler
 } = require("../handlers/sectionHandler");
 /*
     RUTAS PARA TAGS:
@@ -22,6 +23,7 @@ const {
 sectionRouter.get("/", getSectionHandler);
 sectionRouter.get("/:id", sectionByIdHandler);
 sectionRouter.put("/:id", editSectionHandler);
+sectionRouter.delete("/:id", sectionDestroyHandler);
 sectionRouter.post("/", createSectionHandler);
 
 module.exports = sectionRouter;

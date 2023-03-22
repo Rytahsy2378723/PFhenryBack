@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const dishes = Router();
-const { createDish, getDishById, getDishByName, getAllDishes, getDishByTags, editDish } = require("../controllers/dishController");
+const { createDish, getDishById, getDishByName, getAllDishes, getDishByTags, editDish, logicDelete } = require("../controllers/dishController");
 
 //Funcion que se encarga de enviar los datos en base a lo que le llega.
 const getDishessHandler = async (req, res) => {
@@ -65,4 +65,15 @@ const editDishHandler = async (req, res) => {
   }
 };
 
-module.exports = {getDetailHandler, createDishHandler, getDishessHandler, editDishHandler, getDishesByTagsHandler};
+//Funcion que se encarga de, cuando se recibe un id, retornar el detalle del plato.
+const destroyHandler = async (req, res) => {
+  const {id} = req.params;
+  try {
+    const response = await logicDelete(id);
+    res.status(200).send(response);
+  } catch (error) {
+    res.status(400).json({error: error.message});
+  }
+};
+
+module.exports = {getDetailHandler, createDishHandler, getDishessHandler, editDishHandler, getDishesByTagsHandler, destroyHandler};

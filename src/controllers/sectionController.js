@@ -17,6 +17,12 @@ const getAllSection = async () => {
   const section = await Section.findAll();
   return section;
 };
+
+const logicDelete = async (id) => {
+  const tag = await Section.destroy({ where: { id: id }, force: false });
+
+  return "Borrado realizado";
+};
 //Edita un registro de tag y lo devuelve editado
 const editSection = async (id, updatedSection) => {
     const newSection = await Section.update({ 
@@ -26,4 +32,4 @@ const editSection = async (id, updatedSection) => {
     });
     return newSection;
 };
-module.exports = {createSection, getSectionById, getAllSection, editSection};
+module.exports = {createSection, getSectionById, getAllSection, editSection, logicDelete};

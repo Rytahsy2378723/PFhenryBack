@@ -6,7 +6,8 @@ const {
     tagByIdHandler, 
     createTagHandler, 
     getTagsHandler, 
-    editTagHandler
+    editTagHandler,
+    tagDestroyHandler
 } = require("../handlers/tagHandler");
 /*
     RUTAS PARA TAGS:
@@ -22,6 +23,7 @@ const {
 tagsRouter.get("/", getTagsHandler);
 tagsRouter.get("/:id", tagByIdHandler);
 tagsRouter.put("/:id", editTagHandler);
+tagsRouter.delete("/:id", tagDestroyHandler);
 tagsRouter.post("/", createTagHandler);
 
 module.exports = tagsRouter;
