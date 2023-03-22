@@ -58,7 +58,7 @@ const {
 // Aca vendrian las relaciones
 
 // DISHES
-Dishes.hasMany(Critics);}
+Dishes.hasMany(Critic);
 Dishes.belongsToMany(Tags, { through: "dishes_tags" });
 Dishes.belongsTo(Section);
 Dishes.hasMany(OrderDetail);
@@ -73,6 +73,7 @@ Order.hasMany(OrderDetail);
 //ORDER DETAIL
 OrderDetail.belongsTo(Order);
 OrderDetail.hasOne(Offer);
+OrderDetail.belongsTo(Dishes);
 
 //USER
 User.hasMany(Order);
