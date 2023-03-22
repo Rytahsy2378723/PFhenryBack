@@ -31,9 +31,9 @@ const {
   
   //Funcion que se encarga de crear un detalle de pedido en la BD
   const createOrderDetailHandler = async (req, res) => {
-    const { quantity, final_price } = req.body;
+    const { quantity, offerId, dishId } = req.body;
     try {
-      const response = await createOrderDetail(quantity, final_price);
+      const response = await createOrderDetail(quantity, offerId, dishId);
       if(response.error) throw new Error(response.error)
       res.status(200).json(response);
     } catch (error) {

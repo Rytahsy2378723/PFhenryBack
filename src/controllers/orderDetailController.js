@@ -1,8 +1,20 @@
-const { OrderDetail, Order } = require("../db.js");
+const { OrderDetail, Dishes, Offer } = require("../db.js");
 
 //Retorna el detalle con el id pasado
 const getOrderDetailById = async (id) => {
-  const order = await OrderDetail.findByPk(id)
+  const order = await OrderDetail.findByPk(id,{
+    include: [
+      {
+        model: Dishes,
+        atributtes: ['name','price'],
+        as: 'dish'
+      },
+      {
+      model: Offer,
+      atributtes: ['id','discount_porc','availability'],
+      as: 'Offer'
+    }]
+  })
 //   console.log(OrderDetail)
   if(!order) return "No hay detalles con el id: " + id
   return order;
@@ -10,18 +22,23 @@ const getOrderDetailById = async (id) => {
 
 //Retorna todos los detalles
 const getAllOrderDetail = async () => {
-  console.log(OrderDetail)
-  const result = await OrderDetail.findAll()
+  const result = await OrderDetail.findAll({
+    include: [
+      {
+        model: Dishes,
+        atributtes: ['id','name','price'],
+        as: 'dish'
+      },
+      {
+      model: Offer,
+      atributtes: ['id','discount_porc','availability'],
+      as: 'Offer'
+    }]
+  })
   
   return result 
 };
-// retorna todos los detalles de pedidos de el pedido con el id pasado por parametro
-const getAllOrderDetailFromOrderId = async(id) => {
-  const order = await Order.findByPk(id)
-  if(!order) return {error: "Pedido no encontrado"}
-  if(!order.OrderDetail.length) return { error: "EL pedido no tiene detalles de pedido"}
-  return order.OrderDetail
-}
+
 //Elimina el detalle de pedido con el id pasado por parametro
 const deleteOrderDetail = async (id) => {
     const orderDetail = await OrderDetail.findByPk(id)
@@ -42,23 +59,36 @@ const editOrderDetail = async (id,quantity, final_price, ) => {
         },
         {
             where: { id }
-        })
-        // console.log(order)
+        }) 
     
     if(!newDetail.length) return "detalle no encontrado"
     return "Detalle modificado"
     };
+
 //Crea un nuevo detalle de pedido en la BD
-const createOrderDetail = async (quantity, final_price, OrderId) => {
-    if(!quantity) return {error: "falta la cantidad"}
-    console.log(OrderDetail)
+const createOrderDetail = async (quantity, offerId, dishId) => {
+  if(!quantity) return {error: "falta la cantidad"}
+  const dish = await Dishes.findByPk(dishId)
+  const offer = await Offer.findByPk(offerId)
+  let final_price = 0
+//el precio final lo obtengo del precio del plato con el id buscado, para luego descontarle la oferta si esta disponible
+  if(dish){
+    final_price = dish.price
+  }
+
+  if(offer.availability){
+    final_price = (final_price * offer.discount_porc) / 100
+  }
+
   const newOrder = await OrderDetail.create(
     {
       quantity,
-      final_price,
-      OrderId
+      final_price
     }
   );
+  await newOrder.setOffer(offer)
+  // await newOrder.setDishes(dish)
+  // return 'detalle de pedido creado'
   return newOrder;
 };
 module.exports = {
@@ -67,5 +97,13 @@ module.exports = {
   deleteOrderDetail,
   editOrderDetail,
   createOrderDetail,
-  getAllOrderDetailFromOrderId
 };
+
+
+// retorna todos los detalles de pedidos de el pedido con el id pasado por parametro
+// const getAllOrderDetailFromOrderId = async(id) => {
+//   const order = await Order.findByPk(id)
+//   if(!order) return {error: "Pedido no encontrado"}
+//   if(!order.OrderDetail.length) return { error: "EL pedido no tiene detalles de pedido"}
+//   return order.OrderDetail
+// }

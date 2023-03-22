@@ -4,16 +4,17 @@ const {
   editOrder, 
   createOrder, 
   deleteOrderById, 
-  getOrderByUserId } = require("../controllers/orderController");
+  getAllOrderByUserId } = require("../controllers/orderController");
 
-const getOrderByUserIdHandler = async(req, res) => {
+const getAllOrderByUserIdHandler = async(req, res) => {
   const {userId} = req.params
   try {
-    const response = await getOrderByUserId(userId)
+      // console.log(userId)
+    const response = await getAllOrderByUserId(userId)
     if(response.error) throw new Error(response.error)
     res.status(200).json(response)
   } catch (error) {
-    res.status(400).send(error.mesagge)
+    res.status(400).send(error.message)
   }
 }
 
@@ -41,9 +42,9 @@ const getAllOrdersHandler = async (req, res) => {
 };
 //Funcion que se encarga de crear un pedido de la BD con los datos obtenidos por body
 const createOrderHandler = async (req, res) => {
-  const {description, total_price, orderDetails} = req.body;
+  const {description, orderDetails, userId} = req.body;
   try {
-    const response = await createOrder(description, total_price, orderDetails);
+    const response = await createOrder(description, orderDetails, userId);
     res.status(200).json(response);
   } catch (error) {
     res.status(400).json({error: error.message});
@@ -78,5 +79,5 @@ module.exports = {
   getAllOrdersHandler, 
   getOrderByIdHandler,
   deleteOrderByIdHandler,
-  getOrderByUserIdHandler
+  getAllOrderByUserIdHandler
 };
