@@ -42,7 +42,7 @@ const getDishById = async (id) => {
           {
             model: Critic,
             attributes: ['id','title', 'content', 'score'],
-            as: 'reviews'
+            as: 'Critics'
           }
         ]
         });
