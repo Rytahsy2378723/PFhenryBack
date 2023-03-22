@@ -1,0 +1,2 @@
+GOOGLE_CLIENT_ID= 104728938297-vh2a2s2aptlj5vqcqaqb4ri7o25mfnmg.apps.googleusercontent.com
+JWT_SECRET= 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

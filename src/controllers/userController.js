@@ -16,9 +16,7 @@ const createUser = async (name, password, email, phoneNumber) => {
 const getUserById = async (id) => {
   const result = await User.findByPk(id, {
     include: [
-      {
-        model: Address, as: "Addresses",
-      },
+      { model: Address, as: "Addresses" },
       { model: Critic, as: "Critics" },
       { model: Order, as: "Orders" },
       { model: Booking, as: "Bookings" },
