@@ -10,6 +10,7 @@ const orderRoutes = require("./order");
 const orderDetailRoutes = require("./orderDetail");
 const offerRoutes = require("./offers");
 const criticRouter = require("./critic");
+const authRouter = require("./auth")
 
 //Aca tienen que poner los require de las cargas que hacen
 
@@ -26,5 +27,6 @@ mainRouter.use("/bookings", bookingsRouter);
 mainRouter.use("/tables", tablesRouter);
 mainRouter.use("/orderdetails", orderDetailRoutes);
 mainRouter.use("/offers", offerRoutes);
+mainRouter.use("/auth", authRouter);
 
 module.exports = mainRouter;

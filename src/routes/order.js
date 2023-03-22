@@ -8,7 +8,7 @@ const {
     createOrderHandler,
     editOrderHandler,
     deleteOrderByIdHandler,
-    getOrderByUserIdHandler
+    getAllOrderByUserIdHandler
 } = require("../handlers/orderHandler");
 
 orderRoutes.get("/", getAllOrdersHandler);
@@ -16,6 +16,6 @@ orderRoutes.get("/:id", getOrderByIdHandler);
 orderRoutes.put("/:id", editOrderHandler);
 orderRoutes.post("/", createOrderHandler);
 orderRoutes.delete("/:id", deleteOrderByIdHandler);
-orderRoutes.get("/:userId", getOrderByUserIdHandler);
+orderRoutes.get("/user/:userId", getAllOrderByUserIdHandler);
 
 module.exports = orderRoutes;

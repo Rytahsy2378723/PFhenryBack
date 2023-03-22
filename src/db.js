@@ -73,6 +73,7 @@ Order.hasMany(OrderDetail);
 //ORDER DETAIL
 OrderDetail.belongsTo(Order);
 OrderDetail.hasOne(Offer);
+OrderDetail.belongsTo(Dishes);
 
 //USER
 User.hasMany(Order);
