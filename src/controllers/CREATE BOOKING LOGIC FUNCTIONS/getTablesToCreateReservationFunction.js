@@ -1,4 +1,5 @@
-const { Booking, Table } = require("../db.js");
+
+const { Booking, Table } = require("../../db.js");
 
 
 
@@ -44,7 +45,9 @@ const getTablesToCreateReservationFunction = async (body) => {
                     endTimeHour = endTimeHour + endTimeMinute;
                     if (STARTMINUTES < endTimeHour && endTimeHour < 120) {
                         let TableOfThisBooking = tablesSuitableForCapacity.find(table => table.id === allBookings[i].tableId);
-                        TableOfThisBooking.availability = false;
+                        if (TableOfThisBooking) {
+                            TableOfThisBooking.availability = false;
+                        }
                     }
                 }
             }
@@ -63,7 +66,9 @@ const getTablesToCreateReservationFunction = async (body) => {
                 startTimeHour = startTimeHour - 119;
                 if (STARTMINUTES >= startTimeHour && STARTMINUTES <= FINISHBOOKING) {
                     let TableOfThisBooking = tablesSuitableForCapacity.find(table => table.id === allBookings[i].tableId);
-                    TableOfThisBooking.availability = false;
+                    if (TableOfThisBooking) {
+                        TableOfThisBooking.availability = false;
+                    }
                 }
             }
         }
