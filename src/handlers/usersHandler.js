@@ -5,7 +5,20 @@ const {
   editUser,
   deleteUser,
   setAdmin,
+  userLogin,
 } = require("../controllers/userController");
+
+//
+const userLoginHandler = async (req, res) => {
+  const { email, password } = req.body;
+  console.log("entre");
+  try {
+    const response = await userLogin(email, password);
+    res.status(200).send(response);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
 //Funcion que se encarga de enviar los datos en base a lo que le llega.
 const getUsersHandler = async (req, res) => {
@@ -27,12 +40,7 @@ const createUserHandler = async (req, res) => {
         : (() => {
             throw new Error("Faltan datos del usuario");
           })();
-    const response = await createUser(
-      name,
-      password,
-      email,
-      phoneNumber,
-    );
+    const response = await createUser(name, password, email, phoneNumber);
     res.status(200).json(response);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -91,4 +99,5 @@ module.exports = {
   editUserHandler,
   deleteUserHandler,
   setAdminHandler,
+  userLoginHandler,
 };
