@@ -12,6 +12,26 @@ const createUser = async (name, password, email, phoneNumber) => {
   return newUser;
 };
 
+//user login
+const userLogin = async (email, password) => {
+  console.log(password);
+  const user = await User.findOne({ where: { email } });
+  if (user) {
+    const match = await bcrypt.compare(password, user.password);
+    if (match) {
+      // La contraseña es correcta, el usuario puede acceder y se envia su id
+      const datosUsuario = await getUserById(user.id);
+      return datosUsuario;
+    } else {
+      // La contraseña es incorrecta, mostrar un mensaje de error
+      throw new Error("La contrasena es Incorrecta");
+    }
+  } else {
+    // El usuario no existe, mostrar un mensaje de error
+    throw new Error(`El usuario con email ${email} no existe`);
+  }
+};
+
 //Retorna el user buscado por Id
 const getUserById = async (id) => {
   const result = await User.findByPk(id, {
@@ -19,8 +39,9 @@ const getUserById = async (id) => {
       { model: Address, as: "Addresses" },
       { model: Critic, as: "Critics" },
       { model: Order, as: "Orders" },
-      { model: Booking, as: "Bookings" },
+      { model: Booking, as: "bookings" },
     ],
+    attributes: { exclude: ["password"] },
   });
   return result
     ? result
@@ -100,4 +121,5 @@ module.exports = {
   editUser,
   deleteUser,
   setAdmin,
+  userLogin,
 };

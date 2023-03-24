@@ -2,7 +2,7 @@
 const { Booking, Table, User } = require("../db.js");
 const moment = require("moment");
 const { getTablesToCreateReservation } = require("./tableController.js");
-const createBookingFunction = require("./createBookingFunction.js");
+const createBookingFunction = require("./CREATE BOOKING LOGIC FUNCTIONS/createBookingFunction.js");
 
 
 const createBooking = async (body) => {
