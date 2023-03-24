@@ -13,7 +13,7 @@ const {
 } = require("../handlers/usersHandler");
 
 userRouter.get("/", getUsersHandler);
-userRouter.get("/login", userLoginHandler);
+userRouter.post("/login", userLoginHandler);
 userRouter.get("/:id", userByIdHandler);
 userRouter.put("/:id", editUserHandler);
 userRouter.put("/admin/:id", setAdminHandler);
