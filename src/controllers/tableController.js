@@ -1,5 +1,5 @@
 const { Booking, Table } = require("../db.js");
-const getTablesToCreateReservationFunction = require("./CREATE BOOKING LOGIC FUNCTIONS/getTablesToCreateReservationFunction.js");
+const getTablesToCreateReservationFunction = require("./auxFunctions/getTablesToCreateReservationFunction.js");
 
 
 
