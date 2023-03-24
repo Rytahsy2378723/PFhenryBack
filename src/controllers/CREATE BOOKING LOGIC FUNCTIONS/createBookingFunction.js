@@ -1,4 +1,4 @@
-const { Booking, Table, User } = require("../db.js");
+const { Booking, Table, User } = require("../../db.js");
 const moment = require("moment");
 
 //el front envia la fecha y hora en formatos exactos y como string (incluyendo guiones y : exactos)
