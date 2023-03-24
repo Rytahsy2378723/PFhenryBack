@@ -9,9 +9,11 @@ const {
   editUserHandler,
   deleteUserHandler,
   setAdminHandler,
+  userLoginHandler,
 } = require("../handlers/usersHandler");
 
 userRouter.get("/", getUsersHandler);
+userRouter.post("/login", userLoginHandler);
 userRouter.get("/:id", userByIdHandler);
 userRouter.put("/:id", editUserHandler);
 userRouter.put("/admin/:id", setAdminHandler);
