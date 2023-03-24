@@ -9,7 +9,7 @@ const createCritic = async (criticObj) => {
     if (!user) {
       throw new Error(`404 No se encontró un usuario con id ${userId}`);
     } else if (!title) {
-      throw new Error("Tittle is requiered");
+      throw new Error("Title is requiered");
     } else {
       const CriticData = await Critic.create({
         title,
