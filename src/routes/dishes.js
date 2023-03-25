@@ -8,7 +8,8 @@ const {
     getDishessHandler,
     editDishHandler,
     getDishesByTagsHandler,
-    destroyHandler
+    destroyHandler, 
+    getDishesBySectionsHandler
 } = require("../handlers/dishesHandler");
 /*
     RUTAS PARA PLATOS:
@@ -23,6 +24,7 @@ const {
 */
 dishesRouter.get("/", getDishessHandler);
 dishesRouter.post("/tags", getDishesByTagsHandler);
+dishesRouter.get("/sections/:id", getDishesBySectionsHandler);
 dishesRouter.get("/:id", getDetailHandler);
 dishesRouter.put("/:id", editDishHandler);
 dishesRouter.post("/", createDishHandler);
