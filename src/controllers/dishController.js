@@ -78,6 +78,31 @@ const getDishByTags = async (tags) => {
     )
     return dishes;
 };
+
+//Retorna el plato buscado por conjunto de tags, con busqueda de array
+const getDishBySection = async (sectionId) => {
+    const dishes = await Dishes.findAll({
+        include: [{
+            model: Section,
+            where: {
+                id: sectionId
+            }},
+            {
+              model: Tags,
+              attributes: ['id','description'],
+              as: 'tags',
+              through: { attributes: [] }
+            },
+            {
+              model: Critic,
+              attributes: ['id','score'],
+              as: 'Critics'
+            }
+          ]
+        }
+    )
+    return dishes;
+};
 //Retorna todos los platos
 const getAllDishes = async () => {
   const dishes = await Dishes.findAll({
@@ -135,4 +160,4 @@ const editDish = async (id, updatedDish, tagId, sectionId) => {
   });
   return newDish;
 };
-module.exports = {createDish, getDishById, getDishByName, getAllDishes, getDishByTags, editDish, logicDelete};
+module.exports = {createDish, getDishById, getDishByName, getAllDishes, getDishByTags, editDish, logicDelete, getDishBySection};
