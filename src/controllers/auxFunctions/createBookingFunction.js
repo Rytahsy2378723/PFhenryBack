@@ -1,5 +1,6 @@
 const { Booking, Table, User } = require("../../db.js");
 const moment = require("moment");
+const sendEmail = require("./bookingConfirmationEmail.js");
 
 //el front envia la fecha y hora en formatos exactos y como string (incluyendo guiones y : exactos)
 //Fecha: "YYYY-MM-DD"
@@ -47,6 +48,8 @@ const createBookingFunction = async (body) => {
         tableId: tableDesired.id,
         UserId: idUser
     })
+    const userInfo = await User.findByPk(idUser);
+    await sendEmail(userInfo, newBooking);
     return newBooking;
 }
 
