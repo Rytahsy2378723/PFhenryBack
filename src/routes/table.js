@@ -4,10 +4,10 @@ const tablesRouter = Router();
 
 const { putTableHandler, postTableHandler, getAllTablesHandler, getAllBookingInThisTableHandler, getTablesToCreateReservationHandler, deleteTableHandler } = require("../handlers/tableHandler.js");
 
-tablesRouter.post("/", postTableHandler);
+tablesRouter.post("/create", postTableHandler);
 tablesRouter.get("/allTables", getAllTablesHandler);
 tablesRouter.get("/:id", getAllBookingInThisTableHandler);
-tablesRouter.get("/", getTablesToCreateReservationHandler);
+tablesRouter.post("/", getTablesToCreateReservationHandler);
 tablesRouter.delete("/:idTable", deleteTableHandler);
 tablesRouter.put("/", putTableHandler);
 
