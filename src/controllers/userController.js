@@ -14,12 +14,11 @@ const createUser = async (name, password, email, phoneNumber) => {
 
 //user login
 const userLogin = async (email, password) => {
-  console.log(password);
   const user = await User.findOne({ where: { email } });
   const match = await bcrypt.compare(password, user.password);
   if (user && match) {
-      const datosUsuario = await getUserById(user.id);
-      return datosUsuario;
+    const datosUsuario = await getUserById(user.id);
+    return datosUsuario;
   } else {
     // El usuario no existe o la contrasena es incorrecta, mostrar un mensaje de error
     throw new Error(`Las credenciales son invalidas o no coinciden`);
