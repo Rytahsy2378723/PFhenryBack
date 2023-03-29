@@ -2,10 +2,8 @@ const { Router } = require("express");
 
 const authRouter = Router();
 
-const {
-    googleAuth
-} = require("../handlers/authHandler");
+const { googleAuth } = require("../handlers/authHandler");
 
-authRouter.get("/", googleAuth);
+authRouter.post("/", googleAuth);
 
 module.exports = authRouter;

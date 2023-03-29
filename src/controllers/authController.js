@@ -1,47 +1,48 @@
 const { OAuth2Client } = require("google-auth-library");
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-const User = require("../models/User");
 const jwt = require("jsonwebtoken");
+const { User } = require("../db");
+const secretKey = process.env.JWT_SECRET;
+const clientId = process.env.GOOGLE_CLIENT_ID;
+const client = new OAuth2Client(clientId);
 
-//Verificar el token de Google recibido desde el frontend utilizando la biblioteca "google-auth-library":
 async function verifyGoogleToken(token) {
+  console.log(token);
   const ticket = await client.verifyIdToken({
     idToken: token,
-    audience: process.env.GOOGLE_CLIENT_ID,
+    audience: clientId,
   });
-  return ticket.getPayload();
+  const payload = ticket.getPayload();
+  const googleId = payload["sub"];
+  return { payload, googleId };
 }
 
-// Buscar el usuario en la base de datos "users" usando el ID de Google. 
-//Si el usuario no existe, crear uno nuevo con los datos proporcionados:
 async function findOrCreateUser(googleUser) {
-  const [user, created] = await User.findOrCreate({
-    where: { googleId: googleUser.sub },
-    defaults: {
-      name: googleUser.name,
-      email: googleUser.email,
-      imageUrl: googleUser.picture,
-    },
-  });
+  const { googleId, payload } = googleUser;
+  let user = await User.findOne({ where: { googleId } });
+  if (!user) {
+    user = await User.create({
+      googleId,
+      email: payload["email"],
+      name: payload["name"],
+    });
+  }
+  console.log(user);
   return user;
 }
 
-
-
-//Crear un token JWT que incluya la información del usuario y firmarlo con una clave secreta:
 function createJwtToken(user) {
   const payload = {
     id: user.id,
     name: user.name,
     email: user.email,
   };
-  const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
+  const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
+  console.log(token);
   return token;
 }
 
 module.exports = {
-    verifyGoogleToken,
-    findOrCreateUser,
-    createJwtToken,
-   
-  };
+  verifyGoogleToken,
+  findOrCreateUser,
+  createJwtToken,
+};
