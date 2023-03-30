@@ -21,13 +21,7 @@ authRouter.get(
   }),
   (req, res) => {
     const user = JSON.stringify(req.user);
-    res.status(200).send(`<!DOCTYPE html>
-    <html lang="en">
-    <body>
-    </body>
-    <script> window.opener.postMessage(${user}, "http://localhost:3000")
-    </script>
-    </html>`);
+    res.status(200).send(user);
   }
 );
 
