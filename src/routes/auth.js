@@ -6,6 +6,6 @@ const {
     googleAuth
 } = require("../handlers/authHandler");
 
-authRouter.get("/", googleAuth);
+authRouter.post("/", googleAuth);
 
 module.exports = authRouter;

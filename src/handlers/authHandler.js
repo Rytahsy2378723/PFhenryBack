@@ -6,8 +6,10 @@ const {
   
 
 const googleAuth = async (req, res) => {
+    const {credential, g_csrf_token} = req.body
     try {
-      const googleUser = await verifyGoogleToken(req.body.token);
+      console.log(req.body)
+      const googleUser = await verifyGoogleToken(g_csrf_token);
       const user = await findOrCreateUser(googleUser);
       const jwtToken = createJwtToken(user);
       res.status(200).json({ token: jwtToken });
