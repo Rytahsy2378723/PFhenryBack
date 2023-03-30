@@ -1,5 +1,11 @@
 const {Order, OrderDetail, User} = require("../db")
 const {Op} = require('sequelize')
+const mercadopago = require("mercadopago");
+require("dotenv").config()
+
+mercadopago.configure({
+  access_token: process.env.ACCESS_TOKEN
+});
 
 //Crea un pedido en la BD
 const createOrder = async(description, orderDetails, userId) => {
@@ -7,14 +13,38 @@ const createOrder = async(description, orderDetails, userId) => {
     const dateDelivery = new Date  
     const date = dateDelivery.toLocaleString()
     let total_price = 0, i = 0
-    
+    const pref = { 
+        items: [], 
+        back_urls: {
+            failure: "http://localhost:3000/",
+            pending: "http://localhost:3000/",
+            success: "http://localhost:3000/"
+        },
+        payer: {
+            name: "probando123",
+            email: "sonnaiki@yopmail.com"
+        }
+}
 
     while(i < orderDetails.length) {
         const orderDet = await OrderDetail.findByPk(orderDetails[i])
-        total_price += orderDet.final_price
+        const dishName = await Dishes.findByPk(orderDet.dishId)
+        if(orderDet) total_price += orderDet.final_price
         i++
-    }
-
+        pref.items.push ({
+            id: 123,
+            title: `Nombre de la marca`,
+            description: "poner desc",
+            quantity: orderDet.quantity,
+            currency_id: "ARS",
+            unit_price: orderDet.final_price
+          },
+        )
+        }
+    const response = await mercadopago.preferences.create(pref)
+    // console.log(response)
+    // const prefId = response.body.id
+    
     //Establesco la hora de entrega del pedido, +30 minutos
     dateDelivery.setMinutes(dateDelivery.getMinutes() + 30)  
 
@@ -42,7 +72,9 @@ const createOrder = async(description, orderDetails, userId) => {
     
     await newOrder.setOrderDetails(orderDetail)
     await newOrder.setUser(user)
-    return newOrder
+    const mpResponse = { mpId: response.body.id}
+    // console.log(mpResponse)
+    return {mpResponse, message: "Pedido creado"}
 }
 
 //retorna todos los pedidos de la BD
