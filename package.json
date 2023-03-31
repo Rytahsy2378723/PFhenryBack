@@ -33,6 +33,8 @@
     "morgan": "^1.10.0",
     "nodemailer": "^6.9.1",
     "nodemon": "^2.0.21",
+    "passport": "^0.6.0",
+    "passport-github2": "^0.1.12",
     "pg": "^8.10.0",
     "sequelize": "^6.29.3"
   }

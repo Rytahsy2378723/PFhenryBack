@@ -1,11 +1,28 @@
 const { Router } = require("express");
+const passport = require("passport");
 
 const authRouter = Router();
 
-const {
-    googleAuth
-} = require("../handlers/authHandler");
+const { googleAuth } = require("../handlers/authHandler");
 
-authRouter.get("/", googleAuth);
+authRouter.post("/", googleAuth);
+authRouter.get(
+  "/github",
+  passport.authenticate("auth-github", {
+    scope: ["user:email"],
+    session: false,
+  })
+);
+authRouter.get(
+  "/github/callback",
+  passport.authenticate("auth-github", {
+    scope: ["user:email"],
+    session: false,
+  }),
+  (req, res) => {
+    const user = JSON.stringify(req.user);
+    res.status(200).send(user);
+  }
+);
 
 module.exports = authRouter;
