@@ -35,11 +35,47 @@ const deleteBooking = async (bookingId) => {
     return "Successfully deleted"
 }
 
-const getBookingsInThisDate = async (date) => {
-    const bookings = await Booking.findAll({
+const getBookingsInThisDate = async (date, idUser) => {
+    let bookings = await Booking.findAll({
         where: { date_start: date }
     });
+    if (idUser) {
+        let userId = parseInt(idUser);
+        bookings = bookings.filter(booking => booking.UserId === userId);
+    }
+    bookings = bookings.sort((a, b) => new Date(b.date_start) - new Date(a.date_start));
     return bookings;
+}
+
+const getBookingsDatesUser = async (idUser) => {
+    const bookings = await Booking.findAll({
+        where: { UserId: idUser }
+    });
+
+    let dates = [];
+    for (let i = 0; i < bookings.length; i++) {
+        let selectorDate = bookings[i].date_start;
+        let finDate = dates.find(date => date === selectorDate);
+        if (finDate) { } else {
+            dates.push(selectorDate);
+        }
+    }
+    dates = dates.sort((a, b) => new Date(b) - new Date(a));
+    return dates;
+}
+
+const getBookingsDatesAdmin = async () => {
+    const bookings = await Booking.findAll();
+    let dates = [];
+    for (let i = 0; i < bookings.length; i++) {
+        let selectorDate = bookings[i].date_start;
+        let finDate = dates.find(date => date === selectorDate);
+        if (finDate) { } else {
+            dates.push(selectorDate);
+        }
+    }
+    dates = dates.sort((a, b) => new Date(b) - new Date(a));
+    return dates;
 }
 
 const updateBooking = async (idBooking, body) => {
@@ -66,4 +102,4 @@ const updateBooking = async (idBooking, body) => {
 
 }
 
-module.exports = { getBookingsInThisDate, createBooking, getBookings, getBookingsByUser, deleteBooking, updateBooking }
+module.exports = { getBookingsDatesAdmin, getBookingsDatesUser, getBookingsInThisDate, createBooking, getBookings, getBookingsByUser, deleteBooking, updateBooking }
