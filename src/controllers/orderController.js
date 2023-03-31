@@ -14,6 +14,7 @@ const createOrder = async (description, orderDetails, userId) => {
     //Obtengo la hora actual con el objeto Date
     const dateDelivery = new Date
     const date = dateDelivery.toLocaleString()
+    const user = await User.findByPk(userId)
     let total_price = 0, i = 0
     const pref = {
         items: [],
@@ -23,32 +24,34 @@ const createOrder = async (description, orderDetails, userId) => {
             success: "http://localhost:3000/"
         },
         payer: {
-            name: "probando123",
-            email: "sonnaiki@yopmail.com"
+            name: user.name,
+            email: user.email
         }
     }
+    const sendPrice = Math.floor(Math.random()*4);
 
     while (i < orderDetails.length) {
-        const orderDet = await OrderDetail.findByPk(orderDetails[i])
-        const dishName = await Dishes.findByPk(orderDet.dishId)
-        if (orderDet) total_price += orderDet.final_price
+        total_price += orderDetails.price
+        const detailCreado = await OrderDetail.create({
+            quantity: orderDetails[i].quantity,
+            final_price: orderDetails[i].price
+        })
         i++
         pref.items.push({
             id: 123,
-            title: `Nombre de la marca`,
-            description: "poner desc",
-            quantity: orderDet.quantity,
-            currency_id: "ARS",
-            unit_price: orderDet.final_price
+            title: orderDetails[i].name,
+            description: description,
+            quantity: orderDetails[i].quantity,
+            currency_id: "EU",
+            unit_price: orderDetails.price
         },
         )
     }
+    total_price += sendPrice
     const response = await mercadopago.preferences.create(pref)
-    // console.log(response)
-    // const prefId = response.body.id
 
     //Establesco la hora de entrega del pedido, +30 minutos
-    dateDelivery.setMinutes(dateDelivery.getMinutes() + 30)
+    dateDelivery.setMinutes(dateDelivery.getMinutes() + 40)
 
     //creo la orden
     const newOrder = await Order.create({
@@ -61,8 +64,6 @@ const createOrder = async (description, orderDetails, userId) => {
     })
 
     //Le seteo la orden al usuario con el id que me llega por parametro
-    const user = await User.findByPk(userId)
-
 
     const orderDetail = await OrderDetail.findAll({
         where: {
@@ -76,9 +77,9 @@ const createOrder = async (description, orderDetails, userId) => {
     await newOrder.setUser(user)
     const clientInfo = await User.findByPk(newOrder.UserId);
     await sendEmailOrderConfirmation(newOrder, clientInfo);
-    const mpResponse = { mpId: response.body.id }
-    // console.log(mpResponse)
-    return { mpResponse, message: "Pedido creado" }
+    const mpId = response.body.id 
+
+    return { mpId, message: "Pedido creado", time: newOrder.time_delivery }
 }
 
 //retorna todos los pedidos de la BD
