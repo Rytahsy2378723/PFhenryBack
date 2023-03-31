@@ -11,6 +11,7 @@ mercadopago.configure({
 
 //Crea un pedido en la BD
 const createOrder = async (description, orderDetails, userId) => {
+    
     //Obtengo la hora actual con el objeto Date
     const dateDelivery = new Date
     const date = dateDelivery.toLocaleString()
@@ -31,22 +32,24 @@ const createOrder = async (description, orderDetails, userId) => {
     const sendPrice = Math.floor(Math.random()*4);
 
     while (i < orderDetails.length) {
-        total_price += orderDetails.price
+        total_price += orderDetails[i].price
         const detailCreado = await OrderDetail.create({
             quantity: orderDetails[i].quantity,
             final_price: orderDetails[i].price
         })
-        i++
         pref.items.push({
             id: 123,
             title: orderDetails[i].name,
             description: description,
             quantity: orderDetails[i].quantity,
-            currency_id: "EU",
-            unit_price: orderDetails.price
+            currency_id: "ARS",
+            unit_price: orderDetails[i].price
         },
         )
+        total_price = total_price + detailCreado.final_price * orderDetails[i].quantity
+        i++
     }
+    
     total_price += sendPrice
     const response = await mercadopago.preferences.create(pref)
 
@@ -63,17 +66,10 @@ const createOrder = async (description, orderDetails, userId) => {
         description
     })
 
-    //Le seteo la orden al usuario con el id que me llega por parametro
-
-    const orderDetail = await OrderDetail.findAll({
-        where: {
-            id: {
-                [Op.in]: orderDetails
-            }
-        }
-    });
-
-    await newOrder.setOrderDetails(orderDetail)
+    orderDetails.forEach(async(order) => {
+        await newOrder.setOrderDetails(order.id)
+    })
+    
     await newOrder.setUser(user)
     const clientInfo = await User.findByPk(newOrder.UserId);
     await sendEmailOrderConfirmation(newOrder, clientInfo);
