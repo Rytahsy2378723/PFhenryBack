@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const bookings = Router();
-const { createBooking, getBookings, getBookingsByUser, deleteBooking, getBookingsInThisDate, updateBooking } = require("../controllers/bookingController.js");
+const { getBookingsDatesAdmin, getBookingsDatesUser, createBooking, getBookings, getBookingsByUser, deleteBooking, getBookingsInThisDate, updateBooking } = require("../controllers/bookingController.js");
 
 const postBookingHandler = async (req, res) => {
     try {
@@ -41,7 +41,7 @@ const deleteBookingHandler = async (req, res) => {
 
 const getBookingsInThisDateHandler = async (req, res) => {
     try {
-        const bookings = await getBookingsInThisDate(req.body.date);
+        const bookings = await getBookingsInThisDate(req.query.date, req.query.idUser);
         res.status(200).json(bookings);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -57,6 +57,22 @@ const putBookingHandler = async (req, res) => {
     }
 }
 
+const getBookingsDatesUserHandler = async (req, res) => {
+    try {
+        const dates = await getBookingsDatesUser(req.params.idUser);
+        res.status(200).json(dates);
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+}
 
+const getBookingsDatesAdminHandler = async (req, res) => {
+    try {
+        const dates = await getBookingsDatesAdmin();
+        res.status(200).json(dates);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
 
-module.exports = { putBookingHandler, getBookingsInThisDateHandler, postBookingHandler, getBookingHandler, getBookingsByUserHandler, deleteBookingHandler }
+module.exports = { getBookingsDatesAdminHandler, getBookingsDatesUserHandler, putBookingHandler, getBookingsInThisDateHandler, postBookingHandler, getBookingHandler, getBookingsByUserHandler, deleteBookingHandler }
