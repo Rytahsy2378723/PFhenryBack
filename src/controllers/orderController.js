@@ -11,7 +11,6 @@ mercadopago.configure({
 
 //Crea un pedido en la BD
 const createOrder = async (description, orderDetails, userId) => {
-    
     //Obtengo la hora actual con el objeto Date
     const dateDelivery = new Date
     const date = dateDelivery.toLocaleString()
@@ -75,9 +74,10 @@ const createOrder = async (description, orderDetails, userId) => {
     await sendEmailOrderConfirmation(newOrder, clientInfo);
     const mpId = response.body.id 
 
+
+
     return { mpId, message: "Pedido creado", time: newOrder.time_delivery }
 }
-
 //retorna todos los pedidos de la BD
 const getAllOrders = async () => {
     //Traigo todos los pedidos de la base de datos
