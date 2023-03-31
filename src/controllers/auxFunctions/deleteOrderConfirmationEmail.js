@@ -17,7 +17,7 @@ const sendEmailDeleteOrderConfirmation = async (orderInfo, clientInfo) => {
     const transport = nodemailer.createTransport(config);
     const textMessage = "Hola " + clientInfo.name + ", tu pedido que seria " +
         "entregado el " + orderInfo.date_delivery + " a las " + orderInfo.time_delivery + " y tendria un costo de $" +
-        orderInfo.total_price + ".00, fue cancelado correctamente."
+        orderInfo.total_price + " fue cancelado correctamente."
 
     const message = {
         from: EMAIL,
