@@ -17,7 +17,7 @@ const sendEmailOrderConfirmation = async (orderInfo, clientInfo) => {
     const transport = nodemailer.createTransport(config);
     const textMessage = "Hola " + clientInfo.name + ", tu pedido fue creado correctamente y estara siendo " +
         "entregado el " + orderInfo.date_delivery + " a las " + orderInfo.time_delivery + " y tendra un costo de $" +
-        orderInfo.total_price + ".00, muchas gracias por tu preferencia."
+        orderInfo.total_price + ", muchas gracias por tu preferencia."
 
     const message = {
         from: EMAIL,
