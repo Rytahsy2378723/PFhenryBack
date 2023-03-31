@@ -17,7 +17,8 @@ const getTables = async () => {
 
 const getAllBookingInThisTable = async (tableId) => {
     const table = await Table.findByPk(tableId);
-    const bookingsOfThisTable = await table.getBookings();
+    let bookingsOfThisTable = await table.getBookings();
+    bookingsOfThisTable = bookingsOfThisTable.sort((a, b) => new Date(b.date_start) - new Date(a.date_start));
     return bookingsOfThisTable;
 }
 

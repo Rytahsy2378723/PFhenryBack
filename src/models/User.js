@@ -24,10 +24,11 @@ module.exports = (sequelize) => {
       admin: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
-        defaultValue: false
+        defaultValue: false,
       },
       phoneNumber: {
         type: DataTypes.INTEGER,
+        allowNull: true,
       },
     },
     {

@@ -1,15 +1,17 @@
-const {Order, OrderDetail, User} = require("../db")
-const {Op} = require('sequelize')
+const { Order, OrderDetail, User } = require("../db")
+const { Op } = require('sequelize')
 const mercadopago = require("mercadopago");
 require("dotenv").config()
+const sendEmailOrderConfirmation = require("./auxFunctions/orderConfirmationEmail.js");
+const sendEmailDeleteOrderConfirmation = require("./auxFunctions/deleteOrderConfirmationEmail.js");
 
 mercadopago.configure({
-  access_token: process.env.ACCESS_TOKEN
+    access_token: process.env.ACCESS_TOKEN
 });
 
 //Crea un pedido en la BD
 const createOrder = async (description, orderDetails, userId) => {
-    
+
     //Obtengo la hora actual con el objeto Date
     const dateDelivery = new Date
     const date = dateDelivery.toLocaleString()
@@ -27,6 +29,7 @@ const createOrder = async (description, orderDetails, userId) => {
             email: user.email
         }
     }
+
     //hola
     const sendPrice = Math.floor(Math.random()*4);
 
@@ -36,12 +39,14 @@ const createOrder = async (description, orderDetails, userId) => {
             quantity: orderDetails[i].quantity,
             final_price: orderDetails[i].price
         })
+
         pref.items.push({
             id: 123,
             title: orderDetails[i].name,
             description: description,
             quantity: orderDetails[i].quantity,
             currency_id: "ARS",
+
             unit_price: orderDetails[i].price
         },
         )
@@ -65,6 +70,7 @@ const createOrder = async (description, orderDetails, userId) => {
         description
     })
 
+
     orderDetails.forEach(async(order) => {
         await newOrder.setOrderDetails(order.id)
     })
@@ -74,95 +80,98 @@ const createOrder = async (description, orderDetails, userId) => {
     await sendEmailOrderConfirmation(newOrder, clientInfo);
     const mpId = response.body.id 
 
+
     return { mpId, message: "Pedido creado", time: newOrder.time_delivery }
 }
 //retorna todos los pedidos de la BD
-const getAllOrders = async() => {
+const getAllOrders = async () => {
     //Traigo todos los pedidos de la base de datos
     const order = await Order.findAll({
         include: [{
             model: User,
-            attributes: ['name','email'],
+            attributes: ['name', 'email'],
             as: 'User'
         },
         {
             model: OrderDetail,
-            attributes: ['id','quantity','final_price'],
+            attributes: ['id', 'quantity', 'final_price'],
             as: 'OrderDetails'
         }
-    ]
-    })  
-    return order  
+        ]
+    })
+    return order
 }
 
 //retorna el pedido con el id proporcionado por parametro
-const getOrderById = async(id) => {
-    const order = await Order.findByPk(id,{
+const getOrderById = async (id) => {
+    const order = await Order.findByPk(id, {
         include: [{
             model: User,
-            attributes: ['id','name','email'],
+            attributes: ['id', 'name', 'email'],
             as: 'User'
         },
         {
             model: OrderDetail,
-            attributes: ['id','quantity','final_price'],
+            attributes: ['id', 'quantity', 'final_price'],
             as: 'OrderDetails'
         }
-    ]
-    })  
+        ]
+    })
     //En caso de no encontralo
-    if(!order) return { error: "Pedido no encontrado"}   
-    return order 
+    if (!order) return { error: "Pedido no encontrado" }
+    return order
 }
 
 //Retorna todos los pedidos de el usuario con el id pasado por parametro
-const getAllOrderByUserId = async(id) => {
+const getAllOrderByUserId = async (id) => {
     const userOrder = await Order.findAll({
         where: { UserId: id },
         include: [
-        {
-            model: OrderDetail,
-            attributes: ['id','quantity','final_price'],
-            as: 'OrderDetails'
-        }
-    ]
+            {
+                model: OrderDetail,
+                attributes: ['id', 'quantity', 'final_price'],
+                as: 'OrderDetails'
+            }
+        ]
     })
-    if(!userOrder.length) return { error: "El usuario no tiene pedidos"}
+    if (!userOrder.length) return { error: "El usuario no tiene pedidos" }
     return userOrder
 }
 
 // Edita un pedido
-const editOrder = async(id, description, total_price) => {
+const editOrder = async (id, description, total_price) => {
     //busca el pedido a modificar por id
-    let order = await Order.findOne({where: { id }})
+    let order = await Order.findOne({ where: { id } })
     //si lo encuentra lo modifica
-    if(order){
+    if (order) {
         order = await Order.update({
             description,
             total_price
         },
-        {
-            where: {
-                id
-            }
-        })
+            {
+                where: {
+                    id
+                }
+            })
         return "Pedido modificado"
-}
-else return "Pedido no encontrado"
+    }
+    else return "Pedido no encontrado"
 }
 
-const deleteOrderById = async(id) => {
+const deleteOrderById = async (id) => {
     const deleteOrder = await Order.findByPk(id)
-    if(deleteOrder){
-        await Order.destroy({ where: { id }})
+    if (deleteOrder) {
+        await Order.destroy({ where: { id } })
     }
-    else return {error: "Pedido no encontrado"}
+    else return { error: "Pedido no encontrado" }
+    const clientInfo = await User.findByPk(deleteOrder.UserId);
+    await sendEmailDeleteOrderConfirmation(deleteOrder, clientInfo);
     return "Pedido eliminado"
 }
 
 module.exports = {
-    createOrder, 
-    getOrderById, 
+    createOrder,
+    getOrderById,
     editOrder,
     getAllOrders,
     getAllOrderByUserId,
