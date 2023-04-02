@@ -12,7 +12,6 @@ const createUser = async (name, password, email, phoneNumber) => {
     password,
     email,
     phoneNumber,
-    admin: true,
   });
   return newUser;
 };
