@@ -12,7 +12,7 @@ const offerRoutes = require("./offers");
 const criticRouter = require("./critic");
 const loginRouter = require('./login')
 
-const {checkAuth, checkAdminAuth} = require('../middleware/auth')
+
 
 //Aca tienen que poner los require de las cargas que hacen
 
@@ -21,7 +21,7 @@ const mainRouter = Router();
 mainRouter.use("/dishes", dishesRouter);
 mainRouter.use("/tags", tagsRouter);
 mainRouter.use("/sections", sectionRouter);
-mainRouter.use("/users",checkAuth, checkAdminAuth([true]),  userRouter);
+mainRouter.use("/users",  userRouter);
 mainRouter.use("/address", addressRouter);
 mainRouter.use("/orders", orderRoutes);
 mainRouter.use("/critics", criticRouter);

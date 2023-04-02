@@ -3,7 +3,6 @@ const loginRouter = Router();
 const passport = require("passport");
 const { googleAuth } = require("../handlers/loginHandler");
 const { tokenSign } = require("../controllers/auxFunctions/generateToken");
-
 const { loginHandler } = require("../handlers/loginHandler");
 
 //RUTA NORMAL
