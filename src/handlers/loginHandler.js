@@ -1,8 +1,21 @@
+const { userLogin } = require("../controllers/loginController");
+
 const {
   verifyGoogleToken,
   findOrCreateUser,
   createJwtToken,
-} = require("../controllers/authController");
+} = require("../controllers/googleAuthController");
+
+//
+const loginHandler = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const response = await userLogin(email, password);
+    res.status(200).send(response);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
 const googleAuth = async (req, res) => {
   const { credential, g_csrf_token } = req.body;
@@ -16,4 +29,7 @@ const googleAuth = async (req, res) => {
   }
 };
 
-module.exports = { googleAuth };
+module.exports = {
+  loginHandler,
+  googleAuth,
+};

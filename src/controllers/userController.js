@@ -1,6 +1,7 @@
 const { User, Address, Critic, Order, Booking } = require("../db");
 const bcrypt = require("bcrypt"); //Hash de contrasenas (pack de npm)
 
+
 //Funcion que se encarga de guardar el nuevo registro que lleva por POST en la DB
 const createUser = async (name, password, email, phoneNumber) => {
   const oldUser = await User.findOne({ where: { email } });
@@ -16,18 +17,6 @@ const createUser = async (name, password, email, phoneNumber) => {
   return newUser;
 };
 
-//user login
-const userLogin = async (email, password) => {
-  const user = await User.findOne({ where: { email } });
-  const match = await bcrypt.compare(password, user.password);
-  if (user && match) {
-    const datosUsuario = await getUserById(user.id);
-    return datosUsuario;
-  } else {
-    // El usuario no existe o la contrasena es incorrecta, mostrar un mensaje de error
-    throw new Error(`Las credenciales son invalidas o no coinciden`);
-  }
-};
 
 //Retorna el user buscado por Id
 const getUserById = async (id) => {
@@ -118,5 +107,5 @@ module.exports = {
   editUser,
   deleteUser,
   setAdmin,
-  userLogin,
+  
 };
