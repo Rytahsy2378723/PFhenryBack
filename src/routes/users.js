@@ -1,6 +1,7 @@
 const { Router } = require("express");
 
 const userRouter = Router();
+const { checkAuth, checkAdminAuth } = require("../middleware/auth");
 
 const {
   userByIdHandler,
@@ -9,15 +10,23 @@ const {
   editUserHandler,
   deleteUserHandler,
   setAdminHandler,
-  userLoginHandler,
 } = require("../handlers/usersHandler");
 
-userRouter.get("/", getUsersHandler);
-userRouter.post("/login", userLoginHandler);
-userRouter.get("/:id", userByIdHandler);
-userRouter.put("/:id", editUserHandler);
-userRouter.put("/admin/:id", setAdminHandler);
+userRouter.get("/", checkAuth, checkAdminAuth([true]), getUsersHandler);
 userRouter.post("/", createUserHandler);
-userRouter.delete("/delete/:id", deleteUserHandler); // La ruta es exepcionalmente mas explicita para evitar accidentes
+userRouter.put(
+  "/admin/:id",
+  checkAuth,
+  checkAdminAuth([true]),
+  setAdminHandler
+);
+userRouter.delete(
+  "/delete/:id",
+  checkAuth,
+  checkAdminAuth([true]),
+  deleteUserHandler
+); // La ruta es exepcionalmente mas explicita para evitar accidentes
+userRouter.get("/:id", checkAuth, checkAdminAuth([true]), userByIdHandler);
+userRouter.put("/:id", checkAuth, checkAdminAuth([true]), editUserHandler);
 
 module.exports = userRouter;
