@@ -11,7 +11,7 @@ const getOrderDetailById = async (id) => {
       },
       {
       model: Offer,
-      atributtes: ['id','discount_porc','availability'],
+      atributtes: ['id','discount_porc'],
       as: 'Offer'
     }]
   })
