@@ -5,19 +5,7 @@ const {
   editUser,
   deleteUser,
   setAdmin,
-  userLogin,
 } = require("../controllers/userController");
-
-//
-const userLoginHandler = async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const response = await userLogin(email, password);
-    res.status(200).send(response);
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-};
 
 //Funcion que se encarga de enviar los datos en base a lo que le llega.
 const getUsersHandler = async (req, res) => {
@@ -98,5 +86,4 @@ module.exports = {
   editUserHandler,
   deleteUserHandler,
   setAdminHandler,
-  userLoginHandler,
 };
