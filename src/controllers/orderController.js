@@ -11,7 +11,6 @@ mercadopago.configure({
 
 //Crea un pedido en la BD
 const createOrder = async (description, orderDetails, userId) => {
-
     //Obtengo la hora actual con el objeto Date
     const dateDelivery = new Date
     const date = dateDelivery.toLocaleString()
@@ -29,9 +28,8 @@ const createOrder = async (description, orderDetails, userId) => {
             email: user.email
         }
     }
-
-    //hola
     const sendPrice = Math.floor(Math.random()*4);
+    total_price += sendPrice
 
     while (i < orderDetails.length) {
         total_price += orderDetails[i].price
@@ -39,14 +37,12 @@ const createOrder = async (description, orderDetails, userId) => {
             quantity: orderDetails[i].quantity,
             final_price: orderDetails[i].price
         })
-
         pref.items.push({
             id: 123,
             title: orderDetails[i].name,
             description: description,
             quantity: orderDetails[i].quantity,
             currency_id: "ARS",
-
             unit_price: orderDetails[i].price
         },
         )
@@ -70,7 +66,6 @@ const createOrder = async (description, orderDetails, userId) => {
         description
     })
 
-
     orderDetails.forEach(async(order) => {
         await newOrder.setOrderDetails(order.id)
     })
@@ -81,7 +76,8 @@ const createOrder = async (description, orderDetails, userId) => {
     const mpId = response.body.id 
 
 
-    return { mpId, message: "Pedido creado", time: newOrder.time_delivery }
+
+    return { mpId, message: "Pedido creado", time: newOrder.time_delivery, price: newOrder.total_price }
 }
 //retorna todos los pedidos de la BD
 const getAllOrders = async () => {
