@@ -43,7 +43,6 @@ const getAllOrdersHandler = async (req, res) => {
 //Funcion que se encarga de crear un pedido de la BD con los datos obtenidos por body
 const createOrderHandler = async (req, res) => {
   const {description, OrderDetails, userId} = req.body;
-  console.log(req.body)
   try {
     const response = await createOrder(description, OrderDetails, userId);
     res.status(200).json(response);

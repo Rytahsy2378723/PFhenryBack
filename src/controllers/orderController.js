@@ -74,6 +74,7 @@ const createOrder = async (description, orderDetails, userId) => {
     const clientInfo = await User.findByPk(newOrder.UserId);
     await sendEmailOrderConfirmation(newOrder, clientInfo);
     const mpId = response.body.id 
+    //console.log(response.body)
 
 
 
