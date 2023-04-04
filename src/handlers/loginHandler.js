@@ -9,6 +9,8 @@ const {
 //
 const loginHandler = async (req, res) => {
   const { email, password } = req.body;
+  console.log(email)
+
   try {
     const response = await userLogin(email, password);
     res.status(200).send(response);

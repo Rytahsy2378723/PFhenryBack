@@ -26,7 +26,7 @@ userRouter.delete(
   checkAdminAuth([true]),
   deleteUserHandler
 ); // La ruta es exepcionalmente mas explicita para evitar accidentes
-userRouter.get("/:id", checkAuth, checkAdminAuth([true]), userByIdHandler);
-userRouter.put("/:id", checkAuth, checkAdminAuth([true]), editUserHandler);
+userRouter.get("/:id", checkAuth, userByIdHandler);
+userRouter.put("/:id", checkAuth, editUserHandler);
 
 module.exports = userRouter;

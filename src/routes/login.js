@@ -23,15 +23,25 @@ loginRouter.get(
     session: false,
   }),
   async (req, res) => {
-    const user = req.user;
+    const user = JSON.stringify(req.user);
     const tokenSession = await tokenSign(user);
 
-    res.status(200).send({ data: user, tokenSession });
+    const datos = { user , tokenSession}
+
+    // res.status(200).send({ data: user, tokenSession });
+    res.status(200).send(`<!DOCTYPE html>
+    <html lang="en">
+    <head>
+    </head>
+    <body>
+    <script>window.opener.postMessage(${datos}, 'http:/localhost:3000')</script>
+    </body>
+    </html>`);
 
     // const user = JSON.stringify(req.user);
     // res.status(200).send(user);
   }
-);
+)
 
 //RUTA GOOGLE
 loginRouter.post("/google", googleAuth);

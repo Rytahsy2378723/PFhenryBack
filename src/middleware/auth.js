@@ -8,7 +8,9 @@ const checkAuth = async (req, res, next) => {
     }
     console.log("entre aca 1");
     const token = req.headers.authorization.split(" ").pop();
-    const tokenData = await verifyToken(token);
+    let newToken = token.substring(1, token.length - 1);
+    const tokenData = await verifyToken(newToken);
+    console.log(token)
     console.log(tokenData);
     if (tokenData && tokenData.id) {
       console.log("entre aca 2");
