@@ -16,8 +16,8 @@ userRouter.get("/", checkAuth, checkAdminAuth([true]), getUsersHandler);
 userRouter.post("/", createUserHandler);
 userRouter.put(
   "/admin/:id",
-  checkAuth,
-  checkAdminAuth([true]),
+  checkAuth,blockParamsId
+  ,
   setAdminHandler
 );
 userRouter.delete(
