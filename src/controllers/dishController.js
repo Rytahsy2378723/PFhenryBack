@@ -131,7 +131,7 @@ const logicDelete = async (id) => {
 const editDish = async (id, updatedDish, tagId, sectionId) => {
   const newRegister = {
     name:updatedDish.name,
-    image: await uploadImage(updatedDish.image),
+    image:updatedDish.image,
     description: updatedDish.description,
     price:updatedDish.price,
     availability:updatedDish.availability,
