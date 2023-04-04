@@ -4,7 +4,7 @@ const tokenSign = async (user) => {
     return jwt.sign(
         {
             id: user.id,
-            admin: user.admin || false
+            admin: user.admin
 
         },
         process.env.JWT_SECRET,

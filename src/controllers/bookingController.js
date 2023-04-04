@@ -12,7 +12,13 @@ const createBooking = async (body) => {
 }
 
 const getBookings = async () => {
-    let allBookings = await Booking.findAll();
+    let allBookings = await Booking.findAll({
+        include: [{
+            model: User,
+            attributes: ['name', 'email'],
+            as: 'User'
+        }]
+    });
     allBookings = allBookings.sort((a, b) => new Date(b.date_start) - new Date(a.date_start));
     return allBookings;
 }
