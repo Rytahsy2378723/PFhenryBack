@@ -51,25 +51,19 @@ const editUser = async (id, updatedUser) => {
   console.log(password);
   const user = await User.findOne({ where: { id } });
   if (user) {
-    const match = await bcrypt.compare(password, user.password);
-    if (match) {
-      // La contraseña es correcta, el usuario puede cambiar datos
-      const newUser = await User.update(
-        {
-          name: updatedUser.name,
-          password: updatedUser.newPassword,
-          email: updatedUser.email,
-          phoneNumber: updatedUser.phoneNumber,
-        },
-        {
-          where: { id: id },
-        }
-      );
-      return newUser;
-    } else {
-      // La contraseña es incorrecta, mostrar un mensaje de error
-      throw new Error("La contrasena es Incorrecta");
-    }
+    // La contraseña es correcta, el usuario puede cambiar datos
+    const newUser = await User.update(
+      {
+        name: updatedUser.name,
+        password: updatedUser.newPassword,
+        email: updatedUser.email,
+        phoneNumber: updatedUser.phoneNumber,
+      },
+      {
+        where: { id: id },
+      }
+    );
+    return newUser;
   } else {
     // El usuario no existe, mostrar un mensaje de error
     throw new Error(`El usuario con id ${id} no existe`);
