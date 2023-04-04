@@ -7,10 +7,10 @@ passport.use(
     {
       clientID: process.env.GITHUB_CLIENT_ID,
       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: "http://localhost:3001/auth/github/callback",
+      callbackURL: "http://localhost:3001/login/github/callback", //esta ruta se extrae de la configuracion de la pagina de github
     },
     function (accessToken, refreshToken, profile, done) {
-      console.log(profile);
+      // console.log(profile);
       done(null, profile);
     }
   )
