@@ -29,6 +29,10 @@ loginRouter.get(
       const githubUser = JSON.stringify(req.user);
       const email = req.user._json.email;
       const user = req.user;
+
+      /* Si los datos envaidos de github contienen el email del usuario habria que devolver el usuario que existe en la db
+      con ese email, o crear uno con ese email y devolverlo*/
+
       // if (email !== null) {
       //   user = User.findOne({ where: email });
       //   user
@@ -39,6 +43,17 @@ loginRouter.get(
       //   user = req.user;
       // }
 
+      /*Por ahora devuelve un usuario que creamos o encontramos en la db */
+
+      user = await createUser(req.user._json.name, "juanpelotas", email, 12345);
+      console.log("este es el User:", user);
+      console.log(
+        "esto es lo que mando",
+        req.user._json.name,
+        null,
+        email,
+        null
+      );
       const tokenSession = await tokenSign(user);
 
       const datos = { usuario: user, token: tokenSession };
