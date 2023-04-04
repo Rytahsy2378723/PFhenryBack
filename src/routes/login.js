@@ -59,7 +59,7 @@ loginRouter.get(
       <head>
       </head>
       <body>
-      <script>window.opener.postMessage(${payload}, 'http://localhost:3000')</script> 
+      <script>window.opener.postMessage(${payload}, 'https://p-fhenry-front.vercel.app/')</script> 
       </body>
       </html>`);
     } catch (error) {
