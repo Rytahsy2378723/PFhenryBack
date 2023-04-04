@@ -3,17 +3,22 @@ const bcrypt = require("bcrypt"); //Hash de contrasenas (pack de npm)
 
 //Funcion que se encarga de guardar el nuevo registro que lleva por POST en la DB
 const createUser = async (name, password, email, phoneNumber) => {
-  const oldUser = await User.findOne({ where: { email } });
-  if (oldUser) {
-    return oldUser;
+  try {
+    console.log("UserController", name, password, email, phoneNumber);
+    const oldUser = await User.findOne({ where: { email } });
+    if (oldUser) {
+      return oldUser;
+    }
+    const newUser = await User.create({
+      name: name,
+      password: password,
+      email: email,
+      phoneNumber: phoneNumber,
+    });
+    return newUser;
+  } catch (error) {
+    console.log("este es el error", error);
   }
-  const newUser = await User.create({
-    name,
-    password,
-    email,
-    phoneNumber,
-  });
-  return newUser;
 };
 
 //Retorna el user buscado por Id
@@ -46,25 +51,19 @@ const editUser = async (id, updatedUser) => {
   console.log(password);
   const user = await User.findOne({ where: { id } });
   if (user) {
-    const match = await bcrypt.compare(password, user.password);
-    if (match) {
-      // La contraseña es correcta, el usuario puede cambiar datos
-      const newUser = await User.update(
-        {
-          name: updatedUser.name,
-          password: updatedUser.newPassword,
-          email: updatedUser.email,
-          phoneNumber: updatedUser.phoneNumber,
-        },
-        {
-          where: { id: id },
-        }
-      );
-      return newUser;
-    } else {
-      // La contraseña es incorrecta, mostrar un mensaje de error
-      throw new Error("La contrasena es Incorrecta");
-    }
+    // La contraseña es correcta, el usuario puede cambiar datos
+    const newUser = await User.update(
+      {
+        name: updatedUser.name,
+        password: updatedUser.newPassword,
+        email: updatedUser.email,
+        phoneNumber: updatedUser.phoneNumber,
+      },
+      {
+        where: { id: id },
+      }
+    );
+    return newUser;
   } else {
     // El usuario no existe, mostrar un mensaje de error
     throw new Error(`El usuario con id ${id} no existe`);
