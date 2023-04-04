@@ -1,25 +1,7 @@
 const { Offer } = require("../db.js");
 
-
-// const getOfferOfTheDay = async() => {
-//   const offer = await Offer.findAll({
-//     where: {
-//       availability: true
-//     }
-//   })
-//   if(!offer) return { error: "no hay ofertas del dia"}
-//   return offer
-// }
 //Retorna el detalle con el id pasado
 const getOfferById = async (id) => {
-  if(id === 'day'){
-    const offer = await Offer.findAll({
-      where: {
-        availability: true
-      }
-    })
-    return offer
-  }
   const offer = await Offer.findByPk(id)
   if(!offer) return "No hay ofertas con el id: " + id
   return offer;
