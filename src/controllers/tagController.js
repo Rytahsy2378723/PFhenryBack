@@ -19,7 +19,7 @@ const getAllTags = async () => {
 };
 //Se encarga de eliminar un tag mediante borrado logico
 const logicDelete = async (id) => {
-  const tag = await Tag.destroy({ where: { id: id }, force: false });
+  const tag = await Tags.destroy({ where: { id: id }, force: false });
 
   return "Borrado realizado";
 };
