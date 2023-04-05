@@ -19,9 +19,9 @@ const createOrder = async (description, orderDetails, userId) => {
     const pref = {
         items: [],
         back_urls: {
-            failure: "http://localhost:3000/",
-            pending: "http://localhost:3000/",
-            success: "http://localhost:3000/"
+            failure: "https://p-fhenry-front.vercel.app/delivery",
+            pending: "https://p-fhenry-front.vercel.app/delivery",
+            success: "https://p-fhenry-front.vercel.app/delivery"
         },
         payer: {
             name: user.name,
@@ -50,7 +50,6 @@ const createOrder = async (description, orderDetails, userId) => {
         i++
     }
     
-    total_price += sendPrice
     const response = await mercadopago.preferences.create(pref)
 
     //Establesco la hora de entrega del pedido, +30 minutos
