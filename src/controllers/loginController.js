@@ -2,7 +2,7 @@ const { User } = require("../db");
 const bcrypt = require("bcrypt"); //Hash de contrasenas (pack de npm)
 const jtw = require("jsonwebtoken");
 const { tokenSign } = require("./auxFunctions/generateToken");
-
+//1
 //user login
 const userLogin = async (email, password) => {
   

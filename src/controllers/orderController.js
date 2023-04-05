@@ -4,7 +4,7 @@ const mercadopago = require("mercadopago");
 require("dotenv").config()
 const sendEmailOrderConfirmation = require("./auxFunctions/orderConfirmationEmail.js");
 const sendEmailDeleteOrderConfirmation = require("./auxFunctions/deleteOrderConfirmationEmail.js");
-
+//1
 mercadopago.configure({
     access_token: process.env.ACCESS_TOKEN
 });

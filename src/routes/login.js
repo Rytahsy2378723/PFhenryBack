@@ -6,7 +6,7 @@ const { tokenSign } = require("../controllers/auxFunctions/generateToken");
 const { loginHandler } = require("../handlers/loginHandler");
 const { User } = require("../db");
 const { createUser } = require("../controllers/userController");
-
+//1
 //RUTA NORMAL
 loginRouter.post("/", loginHandler);
 

@@ -1,6 +1,6 @@
 const { verifyToken } = require("../controllers/auxFunctions/generateToken");
 const { User } = require("../db");
-
+//1
 const checkAuth = async (req, res, next) => {
   if (!req.headers.authorization) {
     throw new Error("No se recibio ningun token de autorizacion");

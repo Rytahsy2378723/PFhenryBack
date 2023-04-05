@@ -1,6 +1,6 @@
 const passport = require("passport");
 const { Strategy } = require("passport-github2");
-
+//1
 passport.use(
   "auth-github",
   new Strategy(
