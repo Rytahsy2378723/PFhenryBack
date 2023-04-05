@@ -1,7 +1,7 @@
 const {Dishes, Tags, Section, Critic} = require("../db");
 const { Op } = require("sequelize");
 const {uploadImage} = require("./auxFunctions/cloudinaryUpload")
-
+//1
 //Funcion que se encarga de guardar el nuevo registro que lleva por POST en la DB
 const createDish = async (obj, tagId, sectionId) => {
   console.log(tagId);
@@ -131,7 +131,7 @@ const logicDelete = async (id) => {
 const editDish = async (id, updatedDish, tagId, sectionId) => {
   const newRegister = {
     name:updatedDish.name,
-    image:updatedDish.image,
+    image: await uploadImage(updatedDish.image),
     description: updatedDish.description,
     price:updatedDish.price,
     availability:updatedDish.availability,

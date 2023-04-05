@@ -4,7 +4,7 @@ const mercadopago = require("mercadopago");
 require("dotenv").config()
 const sendEmailOrderConfirmation = require("./auxFunctions/orderConfirmationEmail.js");
 const sendEmailDeleteOrderConfirmation = require("./auxFunctions/deleteOrderConfirmationEmail.js");
-
+//1
 mercadopago.configure({
     access_token: process.env.ACCESS_TOKEN
 });
@@ -29,6 +29,7 @@ const createOrder = async (description, orderDetails, userId) => {
         }
     }
     const sendPrice = Math.floor(Math.random()*4);
+    total_price += sendPrice
 
     while (i < orderDetails.length) {
         total_price += orderDetails[i].price
@@ -73,10 +74,9 @@ const createOrder = async (description, orderDetails, userId) => {
     const clientInfo = await User.findByPk(newOrder.UserId);
     await sendEmailOrderConfirmation(newOrder, clientInfo);
     const mpId = response.body.id 
+    //console.log(response.body)
 
-
-
-    return { mpId, message: "Pedido creado", time: newOrder.time_delivery }
+    return { mpId, message: "Pedido creado", time: newOrder.time_delivery, price: newOrder.total_price }
 }
 //retorna todos los pedidos de la BD
 const getAllOrders = async () => {
